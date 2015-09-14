@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ZWCloud.DWriteCairo.DWrite;
 
-namespace DwriteCairo
+namespace ZWCloud.DWriteCairo
 {
     public class DirectWriteCairoTextRenderer :IDisposable
     {
-        private IDirectWriteCairoTextRenderer comObject;
+        internal IDirectWriteCairoTextRenderer comObject;
 
         [ComImport]
         [Guid(DirectXUtil.DirectWrite.IID_IDirectWriteCairoTextRenderer)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IDirectWriteCairoTextRenderer { }
+        public interface IDirectWriteCairoTextRenderer : TextLayout.IDWriteTextRenderer { }
 
         public static DirectWriteCairoTextRenderer Create()
         {
@@ -22,6 +23,19 @@ namespace DwriteCairo
             this.comObject = obj;
         }
 
+        ~DirectWriteCairoTextRenderer()
+        {
+            this.Release();
+        }
+
+        private void Release()
+        {
+            if (this.comObject != null)
+            {
+                Marshal.ReleaseComObject(this.comObject);
+                this.comObject = null;
+            }
+        }
 
         #region COM Method wrappers
         //None
@@ -31,7 +45,8 @@ namespace DwriteCairo
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            this.Release();
+            GC.SuppressFinalize(this);
         }
 
         #endregion

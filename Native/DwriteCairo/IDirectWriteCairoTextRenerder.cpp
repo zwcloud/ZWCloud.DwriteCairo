@@ -1,4 +1,4 @@
-#include "IDirectWriteCairoTextRenerer.h"
+#include "IDirectWriteCairoTextRenderer.h"
 #include <cairo/cairo.h>
 #include "ICairoTessellationSink.h"
 #include "DebugUtility.h"
@@ -11,6 +11,8 @@ IDirectWriteCairoTextRenderer::IDirectWriteCairoTextRenderer()
 {
 	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &pD2DFactory_);
 	DebugAssert(SUCCEEDED(hr), "D2D1CreateFactory ß∞‹£°");
+
+	cr = cairo_get_target(,)
 }
 
 IDirectWriteCairoTextRenderer::~IDirectWriteCairoTextRenderer()

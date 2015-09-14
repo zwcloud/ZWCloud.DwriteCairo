@@ -21,7 +21,7 @@ STDMETHODIMP_(void) ICairoTessellationSink::AddTriangles(__in_ecount(trianglesCo
 {
 	DebugPrintf("AddTriangles, count %d\n", trianglesCount);
 	// here you can copy the triangles data...
-	for (int i = 0; i < trianglesCount; ++i)
+	for (UINT i = 0; i < trianglesCount; ++i)
 	{
 		cairo_move_to(cr, triangles[i].point1.x, triangles[i].point1.y);
 		cairo_line_to(cr, triangles[i].point2.x, triangles[i].point2.y);

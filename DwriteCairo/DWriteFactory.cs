@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using ZWCloud.DWriteCairo.Internal;
 
-namespace DwriteCairo
+namespace ZWCloud.DWriteCairo
 {
     public sealed class DWriteFactory : IDisposable
     {
@@ -93,7 +94,7 @@ namespace DwriteCairo
         /// <param name="fontSize">Logical size of the font in DIP units. A DIP ("device-independent pixel") equals 1/96 inch.</param>
         /// <param name="localeName">Locale name</param>
         /// <returns> newly created text format object </returns>
-        public IntPtr CreateTextFormat(
+        internal IntPtr CreateTextFormat(
             string fontFamilyName,
             IntPtr fontCollection,
             FontWeight fontWeight, FontStyle fontStyle, FontStretch fontStretch,
@@ -137,7 +138,7 @@ namespace DwriteCairo
         /// ) PURE;
         /// </code>
         /// </remarks>
-        public IntPtr CreateTextLayout(string text, int textLength, IntPtr textFormat, float maxWidth, float maxHeight)
+        internal IntPtr CreateTextLayout(string text, int textLength, IntPtr textFormat, float maxWidth, float maxHeight)
         {
             IntPtr textLayout;
             Marshal.ThrowExceptionForHR(this.createTextLayout(
@@ -148,7 +149,7 @@ namespace DwriteCairo
             {
                 Debug.WriteLine("TextLayout created.");
             }
-            return textLayout;
+            return textLayout; 
         }
 
         #endregion

@@ -18,13 +18,10 @@
     <ClCompile Include="ICairoTessellationSink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IDirectWriteCairoTextRenerer.cpp">
+    <ClCompile Include="IDirectWriteCairoTextRenerder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DwriteCairo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DwriteLayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,14 +32,16 @@
     <ClInclude Include="DebugUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IDirectWriteCairoTextRenerer.h">
+    <ClInclude Include="IDirectWriteCairoTextRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DwriteCairo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DwriteLayout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DwriteCairo.def">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

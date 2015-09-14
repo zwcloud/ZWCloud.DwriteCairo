@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace DwriteCairo
+namespace ZWCloud.DWriteCairo
 {
     public sealed class D2D1Factory : IDisposable
     {

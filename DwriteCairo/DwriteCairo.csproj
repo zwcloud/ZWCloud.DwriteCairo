@@ -7,8 +7,8 @@
     <ProjectGuid>{233143AD-EDF8-49C4-B69D-2D1EBF58B82E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DwriteCairo</RootNamespace>
-    <AssemblyName>DwriteCairo</AssemblyName>
+    <RootNamespace>ZWCloud.DWriteCairo</RootNamespace>
+    <AssemblyName>ZWCloud.DWriteCairo</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cairo">
+      <HintPath>..\..\CarioPlayground\Reference\Cairo.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,15 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComHelper.cs" />
+    <Compile Include="DWrite\TextFormat.cs" />
+    <Compile Include="DWrite\TextLayout.cs" />
     <Compile Include="D2D1Factory.cs" />
     <Compile Include="DirectWriteCairoTextRenderer.cs" />
     <Compile Include="DirectXUtil.cs" />
+    <Compile Include="DWriteCairo.cs" />
     <Compile Include="DWriteFactory.cs" />
+    <Compile Include="Internal\ComHelper.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextFormat.cs" />
-    <Compile Include="DWriteTextLayout.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace DwriteCairo
+namespace ZWCloud.DWriteCairo
 {
     public static class DirectXUtil
     {
@@ -82,9 +82,15 @@ namespace DwriteCairo
 
             #endregion
 
+            #region DirectWriteTextLayout
+
+
+            #endregion
+
+
             #region DirectCairo
             public const string IID_IDirectWriteCairoTextRenderer =
-                "F5B028D5-86FD-4332-AD5E-E86CF11CECD4";
+                "f5b028d5-86fd-4332-ad5e-e86cf11cecd4";
             [DllImport("NativeDwriteCairo.dll", PreserveSig = false)]
             [return: MarshalAs(UnmanagedType.Interface)]
             private static extern object DwriteCairoCreateTextRender(
