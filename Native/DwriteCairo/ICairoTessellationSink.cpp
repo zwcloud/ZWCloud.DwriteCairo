@@ -20,19 +20,19 @@ ICairoTessellationSink::~ICairoTessellationSink(void)
 STDMETHODIMP_(void) ICairoTessellationSink::AddTriangles(__in_ecount(trianglesCount) CONST D2D1_TRIANGLE *triangles, UINT trianglesCount)
 {
 	DebugPrintf("AddTriangles, count %d\n", trianglesCount);
-	// here you can copy the triangles data...
+	// copy triangles' data
 	for (UINT i = 0; i < trianglesCount; ++i)
 	{
 		cairo_move_to(cr, triangles[i].point1.x, triangles[i].point1.y);
 		cairo_line_to(cr, triangles[i].point2.x, triangles[i].point2.y);
 		cairo_line_to(cr, triangles[i].point3.x, triangles[i].point3.y);
 		cairo_close_path(cr);
-		cairo_fill(cr);
 	}
 }
 
 STDMETHODIMP ICairoTessellationSink::Close()
 {
+	cairo_fill(cr);
 	DebugPrintf("ICairoTessellationSink::Close\n");
 	return S_OK;
 }
@@ -61,7 +61,7 @@ STDMETHODIMP ICairoTessellationSink::QueryInterface(IID const& riid, void** ppvO
 		*ppvObject = dynamic_cast<IUnknown*>(this);
 	else
 	{
-		*ppvObject = NULL;
+		*ppvObject = nullptr;
 		return E_FAIL;
 	}
 	return S_OK;

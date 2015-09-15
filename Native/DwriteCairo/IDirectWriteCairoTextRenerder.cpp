@@ -12,12 +12,11 @@ IDirectWriteCairoTextRenderer::IDirectWriteCairoTextRenderer()
 	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &pD2DFactory_);
 	DebugAssert(SUCCEEDED(hr), "D2D1CreateFactoryÊ§°Ü£¡");
 
-	cr = cairo_get_target(,)
 }
 
 IDirectWriteCairoTextRenderer::~IDirectWriteCairoTextRenderer()
 {
-	if (pD2DFactory_ != NULL)
+	if (pD2DFactory_ != nullptr)
 	{
 		pD2DFactory_->Release();
 	}
@@ -49,12 +48,14 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 {
 	HRESULT hr;
 
-	ID2D1PathGeometry* pPathGeometry = NULL;
+	surface = cairo_get_target(static_cast<cairo_t*>(clientDrawingContext));
+
+	ID2D1PathGeometry* pPathGeometry = nullptr;
 	hr = pD2DFactory_->CreatePathGeometry(&pPathGeometry);
 	DebugAssert(SUCCEEDED(hr), "CreatePathGeometryÊ§°Ü£¡");
 
 	{
-		ID2D1GeometrySink *pD2DSink = NULL;
+		ID2D1GeometrySink *pD2DSink = nullptr;
 		hr = pPathGeometry->Open(&pD2DSink);
 		DebugAssert(SUCCEEDED(hr), "OpenÊ§°Ü£¡");
 
@@ -82,7 +83,7 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 			hr = E_OUTOFMEMORY;
 		}
 		DebugAssert(SUCCEEDED(hr), "ICairoGeometrySink ´´½¨Ê§°Ü£¡");
-		hr = pPathGeometry->Tessellate(NULL, pSink);
+		hr = pPathGeometry->Tessellate(nullptr, pSink);
 		DebugAssert(SUCCEEDED(hr), "TessellateÊ§°Ü£¡Error: %d\n", hr);
 		hr = pSink->Close();
 		DebugAssert(SUCCEEDED(hr), "CloseÊ§°Ü£¡");
@@ -118,7 +119,7 @@ ULONG IDirectWriteCairoTextRenderer::Release()
 
 HRESULT IDirectWriteCairoTextRenderer::QueryInterface(const IID& riid, void** object)
 {
-	if (object == NULL)
+	if (object == nullptr)
 		return E_POINTER;
 	if (__uuidof(IDWriteTextRenderer) == riid || IID_IDirectWriteCairoTextRenderer == riid || __uuidof(IUnknown) == riid) {
 		*object = this;

@@ -1,4 +1,4 @@
-﻿namespace ComHelper
+﻿namespace DWriteCairoDemo
 {
     partial class Form1
     {

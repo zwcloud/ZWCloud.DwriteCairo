@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using ZWCloud.DWriteCairo.Internal;
 
@@ -14,6 +15,7 @@ namespace ZWCloud.DWriteCairo
 
         #region signature delegates of COM interface method
 
+        [ComMethod(Index = 15)]
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto)]
         private delegate int CreateTextFormatSignature(
             IDWriteFactory factory,
@@ -24,6 +26,7 @@ namespace ZWCloud.DWriteCairo
             string localeName,
             out IntPtr textFormat);
 
+        [ComMethod(Index = 18)]
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto)]
         private delegate int CreateTextLayoutSignature(
             IDWriteFactory factory,
@@ -94,6 +97,20 @@ namespace ZWCloud.DWriteCairo
         /// <param name="fontSize">Logical size of the font in DIP units. A DIP ("device-independent pixel") equals 1/96 inch.</param>
         /// <param name="localeName">Locale name</param>
         /// <returns> newly created text format object </returns>
+        /// <remarks>
+        /// <code>
+        /// STDMETHOD(CreateTextFormat)(
+        ///     _In_z_ WCHAR const* fontFamilyName,
+        ///     _In_opt_ IDWriteFontCollection* fontCollection,
+        ///     DWRITE_FONT_WEIGHT fontWeight,
+        ///     DWRITE_FONT_STYLE fontStyle,
+        ///     DWRITE_FONT_STRETCH fontStretch,
+        ///     FLOAT fontSize,
+        ///     _In_z_ WCHAR const* localeName,
+        ///     _COM_Outptr_ IDWriteTextFormat** textFormat
+        ///     ) PURE;
+        /// </code>
+        /// </remarks>
         internal IntPtr CreateTextFormat(
             string fontFamilyName,
             IntPtr fontCollection,
@@ -126,7 +143,6 @@ namespace ZWCloud.DWriteCairo
         /// The resultant object.
         /// </returns>
         /// <remarks>
-        /// Native signature of the COM method
         /// <code>
         /// STDMETHOD(CreateTextLayout)(
         ///     _In_reads_(stringLength) WCHAR const* string,

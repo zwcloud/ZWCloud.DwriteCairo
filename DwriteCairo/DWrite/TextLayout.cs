@@ -13,7 +13,7 @@ namespace ZWCloud.DWriteCairo.DWrite
         [ComImport]
         [Guid("53737037-6d14-410b-9bfe-0b182bb70961")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IDWriteTextLayout { }
+        public interface IDWriteTextLayout { }//contains 25 method(inherited method not included)
 
         [ComImport]
         [Guid("ef8a8135-5cc6-45fe-8825-c5a0724eb819")]
@@ -21,6 +21,29 @@ namespace ZWCloud.DWriteCairo.DWrite
         public interface IDWriteTextRenderer { }
         
         #region signature delegates of COM method
+
+        [ComMethod(Index = 28)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate int SetMaxWidthSignature(
+            IDWriteTextLayout layout,
+            float maxWidth);
+
+        [ComMethod(Index = 29)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate int SetMaxHeightSignature(
+            IDWriteTextLayout layout,
+            float maxHeight);
+
+        [ComMethod(Index = 42)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate float GetMaxWidthSignature(
+            IDWriteTextLayout layout);
+
+        [ComMethod(Index = 43)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate float GetMaxHeightSignature(
+            IDWriteTextLayout layout);
+
         [ComMethod(Index=58)]
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate int DrawSignature(
@@ -29,6 +52,7 @@ namespace ZWCloud.DWriteCairo.DWrite
             IDWriteTextRenderer renderer,
             float originX, float originY);
 
+
         #endregion
 
         internal IntPtr Handle
@@ -36,6 +60,10 @@ namespace ZWCloud.DWriteCairo.DWrite
             get { return Marshal.GetIUnknownForObject(this.comObject); }
         }
         private IDWriteTextLayout comObject;
+        private SetMaxWidthSignature setMaxWidth;
+        private SetMaxHeightSignature setMaxHeight;
+        private GetMaxWidthSignature getMaxWidth;
+        private GetMaxHeightSignature getMaxHeight;
         private DrawSignature draw;
 
         internal TextLayout(IntPtr objPtr)
@@ -54,12 +82,22 @@ namespace ZWCloud.DWriteCairo.DWrite
         {
             bool result;
 
-            result = ComHelper.GetComMethod(this.comObject, 58/*index of the draw signature in the interface*/,
-                                       out this.draw);
-            if (!result)
-            {
-                Debug.WriteLine("Fail to get COM method at index {0}", 58);
-            }
+            result = ComHelper.GetComMethod(this.setMaxWidth, 28, out this.draw);
+            if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 28);
+
+            result = ComHelper.GetComMethod(this.setMaxHeight, 29, out this.draw);
+            if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 29);
+
+            result = ComHelper.GetComMethod(this.getMaxWidth, 42, out this.draw);
+            if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 42);
+
+            result = ComHelper.GetComMethod(this.getMaxHeight, 43, out this.draw);
+            if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 43);
+
+            result = ComHelper.GetComMethod(this.comObject, 58, out this.draw);
+            if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 58); 
+
+            
         }
 
         ~TextLayout()
@@ -73,6 +111,11 @@ namespace ZWCloud.DWriteCairo.DWrite
             {
                 Marshal.ReleaseComObject(this.comObject);
                 this.comObject = null;
+
+                this.setMaxWidth = null;
+                this.setMaxHeight = null;
+                this.getMaxWidth = null;
+                this.getMaxHeight = null;
                 this.draw = null;
             }
         }
@@ -106,12 +149,75 @@ namespace ZWCloud.DWriteCairo.DWrite
             var dwriterender = (IDWriteTextRenderer) renderer.comObject; 
             Marshal.ThrowExceptionForHR(this.draw(
                 this.comObject,
-                //TODO pass cairo context here into the renderer and use cairo_get_target to get the surface in native codes
                 clientDrawingContext, dwriterender, originX, originY));
+        }
+        
+        /// <summary>
+        /// Set layout maximum width
+        /// </summary>
+        /// <param name="maxWidth">Layout maximum width</param>
+        /// <returns>
+        /// Standard HRESULT error code.
+        /// </returns>
+        /// <remarks>
+        /// <code>
+        /// STDMETHOD(SetMaxWidth)(
+        ///     FLOAT maxWidth
+        ///     ) PURE;
+        /// </code>
+        /// </remarks>
+        private void SetMaxWidth(float maxWidth)
+        {
+            Marshal.ThrowExceptionForHR(this.setMaxWidth(this.comObject,
+                maxWidth));
         }
 
 
+        /// <summary>
+        /// Set layout maximum height
+        /// </summary>
+        /// <param name="maxHeight">Layout maximum height</param>
+        /// <returns>
+        /// Standard HRESULT error code.
+        /// </returns>
+        /// <remarks>
+        /// <code>
+        /// STDMETHOD(SetMaxHeight)(
+        ///     FLOAT maxHeight
+        ///     ) PURE;
+        /// </code>
+        /// </remarks>
+        private void SetMaxHeight(float maxHeight)
+        {
+            Marshal.ThrowExceptionForHR(this.setMaxHeight(this.comObject,
+                maxHeight));
+        }
+
+        /// <summary>
+        /// Get layout maximum width
+        /// </summary>
+        /// STDMETHOD_(FLOAT, GetMaxWidth)() PURE;
+        private float GetMaxWidth()
+        {
+            return this.getMaxWidth(this.comObject);
+        }
+        
+        /// <summary>
+        /// Get layout maximum height
+        /// </summary>
+        /// <remarks>
+        /// <code>
+        /// STDMETHOD_(FLOAT, GetMaxHeight)() PURE;
+        /// </code>
+        /// </remarks>
+        private float GetMaxHeight()
+        {
+            return this.getMaxHeight(this.comObject);
+        }
+
         #endregion
+
+
 
         #region Implementation of IDisposable
 
@@ -127,22 +233,36 @@ namespace ZWCloud.DWriteCairo.DWrite
 
         #region API
 
-        public float width;
         public float Width
         {
-            //TODO implement this from COM method IDWriteTextLayout::GetMaxHeight
-            get { return width; }
-            //TODO implement this from COM method IDWriteTextLayout::SetMaxHeight
-            set { width = value; }
+            get
+            {
+                return GetMaxWidth();
+            }
+            set
+            {
+                SetMaxWidth(value);
+            }
         }
-
+        
+        public float Height
+        {
+            get
+            {
+                return GetMaxHeight();
+            }
+            set
+            {
+                SetMaxHeight(value);
+            }
+        }
 
         public void Show(Context context, DirectWriteCairoTextRenderer render, TextLayout textLayout)
         {
-            var surface = context.GetTarget();
-            //this.Draw(surface.Handle, render, textLayout.);
-            
+            this.Draw(context.Handle, render, 0, 0);//Do not move the origin
         }
+
+        /*TODO*/
 
         public void SetText(string text)
         {

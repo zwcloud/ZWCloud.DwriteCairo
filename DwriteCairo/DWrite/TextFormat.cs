@@ -14,7 +14,7 @@ namespace ZWCloud.DWriteCairo.DWrite
         [ComImport]
         [Guid(IID_IDWriteTextFormat)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IDWriteTextFormat { }
+        public interface IDWriteTextFormat { }//contains 25 method(inherited method not included)
 
         internal IntPtr Handle
         {
