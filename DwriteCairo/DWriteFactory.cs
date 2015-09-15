@@ -121,7 +121,7 @@ namespace ZWCloud.DWriteCairo
             IntPtr textFormat;
             Marshal.ThrowExceptionForHR(this.createTextFormat(
                                   this.comObject,
-                                  fontFamilyName, fontCollection, fontWeight, fontStyle, fontStretch, fontSize, "en-us", out textFormat));
+                                  fontFamilyName, fontCollection, fontWeight, fontStyle, fontStretch, fontSize, localeName, out textFormat));
             if(textFormat!=IntPtr.Zero)
             {
                 Debug.WriteLine("TextFormat created.");
