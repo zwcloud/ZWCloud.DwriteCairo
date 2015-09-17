@@ -53,14 +53,14 @@ namespace ZWCloud.DWriteCairo
 
             bool result;
 
-            result = ComHelper.GetComMethod(this.comObject, 15/*index of the createTextFormat signature in interface*/,
+            result = ComHelper.GetComMethod(this.comObject, 15,
                                        out this.createTextFormat);
             if(!result)
             {
                 Debug.WriteLine("Fail to get COM method at index {0}", 15);
             }
 
-            result = ComHelper.GetComMethod(this.comObject, 18/*index of the createTextFormat signature in interface*/,
+            result = ComHelper.GetComMethod(this.comObject, 18,
                                        out this.createTextLayout);
             if (!result)
             {
@@ -81,6 +81,7 @@ namespace ZWCloud.DWriteCairo
                 Marshal.ReleaseComObject(this.comObject);
                 this.comObject = null;
                 this.createTextFormat = null;
+                this.createTextLayout = null;
             }
         }
 
@@ -157,10 +158,11 @@ namespace ZWCloud.DWriteCairo
         internal IntPtr CreateTextLayout(string text, int textLength, IntPtr textFormat, float maxWidth, float maxHeight)
         {
             IntPtr textLayout;
-            Marshal.ThrowExceptionForHR(this.createTextLayout(
-                                  this.comObject,
-                                  text, textLength, textFormat, maxWidth, maxHeight,
-                                  out textLayout));
+            var hr = this.createTextLayout(
+                this.comObject,
+                text, textLength, textFormat, maxWidth, maxHeight,
+                out textLayout);
+            Marshal.ThrowExceptionForHR(hr);
             if (textLayout != IntPtr.Zero)
             {
                 Debug.WriteLine("TextLayout created.");

@@ -23,20 +23,15 @@ namespace ZWCloud.DWriteCairo.DWrite
 
         internal IntPtr Handle
         {
-            get { return Marshal.GetIUnknownForObject(this.comObject); }
+            // BUG? Marshal.GetIUnknownForObject(this.comObject) will offset the pointer by 4 bytes
+            get; private set;
         }
 
         internal TextFormat(IntPtr objPtr)
         {
             this.comObject =
                 (IDWriteTextFormat)Marshal.GetObjectForIUnknown(objPtr);
-
-            InitComMethods();
-        }
-        internal TextFormat(IDWriteTextFormat obj)
-        {
-            this.comObject = obj;
-
+            this.Handle = objPtr;
             InitComMethods();
         }
 

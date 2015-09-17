@@ -51,7 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Cairo">
-      <HintPath>..\..\CarioPlayground\Reference\Cairo.dll</HintPath>
+      <HintPath>..\..\ZWCloud.Cairo\Cairo\bin\x86\Debug\Cairo.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

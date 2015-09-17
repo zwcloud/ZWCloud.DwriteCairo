@@ -55,10 +55,7 @@ namespace ZWCloud.DWriteCairo.DWrite
 
         #endregion
 
-        internal IntPtr Handle
-        {
-            get { return Marshal.GetIUnknownForObject(this.comObject); }
-        }
+        internal IntPtr Handle { get; private set; }
         private IDWriteTextLayout comObject;
         private SetMaxWidthSignature setMaxWidth;
         private SetMaxHeightSignature setMaxHeight;
@@ -68,14 +65,10 @@ namespace ZWCloud.DWriteCairo.DWrite
 
         internal TextLayout(IntPtr objPtr)
         {
+            this.Handle = objPtr;
             this.comObject =
                 (IDWriteTextLayout) Marshal.GetObjectForIUnknown(objPtr);
 
-            InitComMethods();
-        }
-        internal TextLayout(IDWriteTextLayout obj)
-        {
-            this.comObject = obj;
             InitComMethods();
         }
         internal void InitComMethods()
