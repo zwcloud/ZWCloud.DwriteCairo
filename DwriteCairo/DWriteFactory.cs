@@ -8,6 +8,8 @@ namespace ZWCloud.DWriteCairo
 {
     public sealed class DWriteFactory : IDisposable
     {
+        #region COM internals
+
         [ComImport]
         [Guid(DirectXUtil.DirectWrite.IID_IDwriteFactory)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -169,6 +171,8 @@ namespace ZWCloud.DWriteCairo
             }
             return textLayout; 
         }
+
+        #endregion
 
         #endregion
 

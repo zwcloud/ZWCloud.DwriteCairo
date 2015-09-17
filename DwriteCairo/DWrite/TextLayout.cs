@@ -75,16 +75,16 @@ namespace ZWCloud.DWriteCairo.DWrite
         {
             bool result;
 
-            result = ComHelper.GetComMethod(this.setMaxWidth, 28, out this.draw);
+            result = ComHelper.GetComMethod(this.comObject, 28, out this.setMaxWidth);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 28);
 
-            result = ComHelper.GetComMethod(this.setMaxHeight, 29, out this.draw);
+            result = ComHelper.GetComMethod(this.comObject, 29, out this.setMaxHeight);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 29);
 
-            result = ComHelper.GetComMethod(this.getMaxWidth, 42, out this.draw);
+            result = ComHelper.GetComMethod(this.comObject, 42, out this.getMaxWidth);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 42);
 
-            result = ComHelper.GetComMethod(this.getMaxHeight, 43, out this.draw);
+            result = ComHelper.GetComMethod(this.comObject, 43, out this.getMaxHeight);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 43);
 
             result = ComHelper.GetComMethod(this.comObject, 58, out this.draw);

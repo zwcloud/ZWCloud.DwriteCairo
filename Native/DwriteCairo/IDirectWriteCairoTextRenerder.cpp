@@ -48,7 +48,8 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 {
 	HRESULT hr;
 
-	surface = cairo_get_target(static_cast<cairo_t*>(clientDrawingContext));
+	cr = static_cast<cairo_t*>(clientDrawingContext);
+	surface = cairo_get_target(cr);
 
 	ID2D1PathGeometry* pPathGeometry = nullptr;
 	hr = pD2DFactory_->CreatePathGeometry(&pPathGeometry);
