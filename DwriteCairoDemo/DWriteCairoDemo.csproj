@@ -53,14 +53,9 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpDX">
-      <HintPath>..\packages\SharpDX.3.0.0-beta01\lib\net45\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct2D1">
-      <HintPath>..\packages\SharpDX.Direct2D1.3.0.0-beta01\lib\net45\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>..\packages\SharpDX.DXGI.3.0.0-beta01\lib\net45\SharpDX.DXGI.dll</HintPath>
+    <Reference Include="Cairo, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ZWCloud.Cairo\Cairo\bin\x86\Debug\Cairo.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -95,7 +90,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -111,7 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DwriteCairo\DWriteCairo.csproj">
-      <Project>{233143ad-edf8-49c4-b69d-2d1ebf58b82e}</Project>
+      <Project>{233143AD-EDF8-49C4-B69D-2D1EBF58B82E}</Project>
       <Name>DWriteCairo</Name>
     </ProjectReference>
   </ItemGroup>
