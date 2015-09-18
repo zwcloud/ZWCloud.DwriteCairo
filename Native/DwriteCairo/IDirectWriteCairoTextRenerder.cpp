@@ -88,6 +88,10 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 		DebugAssert(SUCCEEDED(hr), "TessellateÊ§°Ü£¡Error: %d\n", hr);
 		hr = pSink->Close();
 		DebugAssert(SUCCEEDED(hr), "CloseÊ§°Ü£¡");
+
+		cairo_surface_flush(surface);
+		DebugPrintf("%s\n", cairo_status_to_string(cairo_status(cr)));
+
 		pSink->Release();
 	}
 

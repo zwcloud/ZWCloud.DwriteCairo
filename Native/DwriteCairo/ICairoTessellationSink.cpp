@@ -32,7 +32,9 @@ STDMETHODIMP_(void) ICairoTessellationSink::AddTriangles(__in_ecount(trianglesCo
 
 STDMETHODIMP ICairoTessellationSink::Close()
 {
+	DebugPrintf("%s\n",cairo_status_to_string(cairo_status(cr)));
 	cairo_fill(cr);
+	DebugPrintf("%s\n", cairo_status_to_string(cairo_status(cr)));
 	DebugPrintf("ICairoTessellationSink::Close\n");
 	return S_OK;
 }

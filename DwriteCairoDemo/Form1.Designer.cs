@@ -38,7 +38,6 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Shown += new System.EventHandler(this.Form1_Shown);
-            this.DoubleClick += new System.EventHandler(this.button1_Click);
             this.ResumeLayout(false);
 
         }
