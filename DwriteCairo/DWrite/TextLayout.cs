@@ -252,7 +252,7 @@ namespace ZWCloud.DWriteCairo.DWrite
 
         public void Show(Context context, DirectWriteCairoTextRenderer render, TextLayout textLayout)
         {
-            this.Draw(context.Handle, render, 0, 0);//Do not move the origin
+            this.Draw(context.Handle, render, (float)context.CurrentPoint.X, (float)context.CurrentPoint.Y);
         }
 
         /*TODO*/

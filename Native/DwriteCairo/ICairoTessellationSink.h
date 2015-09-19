@@ -6,7 +6,7 @@ struct ICairoTessellationSink : ID2D1TessellationSink
 {
 	// {88DE7550-6F56-4C4F-98DF-FB589E35DB43}
 	static const GUID IID_ICairoTessellationSink;
-	ICairoTessellationSink(__notnull cairo_t *cr, FLOAT x, FLOAT y);
+	ICairoTessellationSink(__notnull cairo_t *cr);
 	virtual ~ICairoTessellationSink(void);
 	STDMETHOD_(void, AddTriangles)(
 		__in_ecount(trianglesCount) CONST D2D1_TRIANGLE *triangles, UINT trianglesCount

@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Cairo;
 using ZWCloud.DWriteCairo;
 using ZWCloud.DWriteCairo.DWrite;
-using ZWCloud.DWriteCairo;
-using ZWCloud.DWriteCairo.DWrite;
 using FontStyle = ZWCloud.DWriteCairo.FontStyle;
 using FontWeight = ZWCloud.DWriteCairo.FontWeight;
-using Graphics = System.Drawing.Graphics;
 
 namespace DWriteCairoDemo
 {
     public partial class Form1 : Form
     {
-        public Graphics Graphics1 { get; private set; }
         public Context Context1 { get; set; }
         public Win32Surface Surface1 { get; private set; }
 
@@ -25,9 +20,6 @@ namespace DWriteCairoDemo
         {
             InitializeComponent();
         }
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern IntPtr GetDC(IntPtr hWnd);
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -56,7 +48,6 @@ namespace DWriteCairoDemo
 
             Surface1 = new Win32Surface(this.CreateGraphics().GetHdc());
             Context1 = new Context(Surface1);
-            Context1.Antialias = Antialias.Subpixel;
 
             var textFormat = DWriteCairo.CreateTextFormat(
                 "Arial",
@@ -72,11 +63,6 @@ namespace DWriteCairoDemo
 
             Debug.WriteLine("showing layout");
             DWriteCairo.ShowLayout(Context1, textLayout);
-        }
-
-        private void Form1_DoubleClick(object sender, EventArgs e)
-        {
-            Context1.GetTarget().WriteToPng("D:\\hello.png");
         }
     }
 }

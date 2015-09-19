@@ -6,11 +6,8 @@
 const GUID ICairoTessellationSink::IID_ICairoTessellationSink =
 { 0x88de7550, 0x6f56, 0x4c4f, { 0x98, 0xdf, 0xfb, 0x58, 0x9e, 0x35, 0xdb, 0x43 } };
 
-ICairoTessellationSink::ICairoTessellationSink(cairo_t *cr_, FLOAT x_, FLOAT y_) : m_cRefCount(0), cr(cr_)
+ICairoTessellationSink::ICairoTessellationSink(cairo_t *cr_) : m_cRefCount(0), cr(cr_)
 {
-	cairo_set_source_rgb(cr, 1, 0, 0);
-	cairo_identity_matrix(cr);
-	cairo_translate(cr, x_, y_);
 }
 
 ICairoTessellationSink::~ICairoTessellationSink(void)
@@ -19,8 +16,6 @@ ICairoTessellationSink::~ICairoTessellationSink(void)
 
 STDMETHODIMP_(void) ICairoTessellationSink::AddTriangles(__in_ecount(trianglesCount) CONST D2D1_TRIANGLE *triangles, UINT trianglesCount)
 {
-	DebugPrintf("AddTriangles, count %d\n", trianglesCount);
-	// copy triangles' data
 	for (UINT i = 0; i < trianglesCount; ++i)
 	{
 		cairo_move_to(cr, triangles[i].point1.x, triangles[i].point1.y);
@@ -32,10 +27,8 @@ STDMETHODIMP_(void) ICairoTessellationSink::AddTriangles(__in_ecount(trianglesCo
 
 STDMETHODIMP ICairoTessellationSink::Close()
 {
-	DebugPrintf("%s\n",cairo_status_to_string(cairo_status(cr)));
 	cairo_fill(cr);
-	DebugPrintf("%s\n", cairo_status_to_string(cairo_status(cr)));
-	DebugPrintf("ICairoTessellationSink::Close\n");
+	//DebugPrintf("ICairoTessellationSink::Close\n");
 	return S_OK;
 }
 

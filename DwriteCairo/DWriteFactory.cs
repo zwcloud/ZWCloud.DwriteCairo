@@ -122,13 +122,11 @@ namespace ZWCloud.DWriteCairo
             string localeName)
         {
             IntPtr textFormat;
-            Marshal.ThrowExceptionForHR(this.createTextFormat(
-                                  this.comObject,
-                                  fontFamilyName, fontCollection, fontWeight, fontStyle, fontStretch, fontSize, localeName, out textFormat));
-            if(textFormat!=IntPtr.Zero)
-            {
-                Debug.WriteLine("TextFormat created.");
-            }
+            var hr = this.createTextFormat(
+                this.comObject,
+                fontFamilyName, fontCollection, fontWeight, fontStyle,
+                fontStretch, fontSize, localeName, out textFormat);
+            Marshal.ThrowExceptionForHR(hr);
             return textFormat;
         }
 
@@ -165,10 +163,6 @@ namespace ZWCloud.DWriteCairo
                 text, textLength, textFormat, maxWidth, maxHeight,
                 out textLayout);
             Marshal.ThrowExceptionForHR(hr);
-            if (textLayout != IntPtr.Zero)
-            {
-                Debug.WriteLine("TextLayout created.");
-            }
             return textLayout; 
         }
 

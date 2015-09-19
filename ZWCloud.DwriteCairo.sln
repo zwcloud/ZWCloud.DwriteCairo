@@ -9,7 +9,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DwriteCairo", "Native\Dwrit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DWriteCairoDemo", "DwriteCairoDemo\DWriteCairoDemo.csproj", "{F749572F-A374-4B26-B24D-7CC29DD4E615}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DWriteCairo", "DwriteCairo\DWriteCairo.csproj", "{233143AD-EDF8-49C4-B69D-2D1EBF58B82E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DwriteCairo", "DwriteCairo\DwriteCairo.csproj", "{233143AD-EDF8-49C4-B69D-2D1EBF58B82E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0EA56A4F-C692-4BD5-9D77-78587C70A618} = {0EA56A4F-C692-4BD5-9D77-78587C70A618}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DwriteCairoDemo_DoubleBuffered", "DwriteCairoDemo_DoubleBuffered\DwriteCairoDemo_DoubleBuffered.csproj", "{FC4016E2-0149-4E23-8B1A-C443DACB8454}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +34,10 @@ Global
 		{233143AD-EDF8-49C4-B69D-2D1EBF58B82E}.Debug|x86.Build.0 = Debug|x86
 		{233143AD-EDF8-49C4-B69D-2D1EBF58B82E}.Release|x86.ActiveCfg = Release|x86
 		{233143AD-EDF8-49C4-B69D-2D1EBF58B82E}.Release|x86.Build.0 = Release|x86
+		{FC4016E2-0149-4E23-8B1A-C443DACB8454}.Debug|x86.ActiveCfg = Debug|x86
+		{FC4016E2-0149-4E23-8B1A-C443DACB8454}.Debug|x86.Build.0 = Debug|x86
+		{FC4016E2-0149-4E23-8B1A-C443DACB8454}.Release|x86.ActiveCfg = Release|x86
+		{FC4016E2-0149-4E23-8B1A-C443DACB8454}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -11,7 +11,6 @@ IDirectWriteCairoTextRenderer::IDirectWriteCairoTextRenderer()
 {
 	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &pD2DFactory_);
 	DebugAssert(SUCCEEDED(hr), "D2D1CreateFactory ß∞‹£°");
-
 }
 
 IDirectWriteCairoTextRenderer::~IDirectWriteCairoTextRenderer()
@@ -50,6 +49,8 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 
 	cr = static_cast<cairo_t*>(clientDrawingContext);
 	surface = cairo_get_target(cr);
+	cairo_identity_matrix(cr);
+	cairo_translate(cr, baselineOriginX, baselineOriginY);
 
 	ID2D1PathGeometry* pPathGeometry = nullptr;
 	hr = pD2DFactory_->CreatePathGeometry(&pPathGeometry);
@@ -78,7 +79,7 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 	}
 
 	{
-		ICairoTessellationSink* pSink = new ICairoTessellationSink(cr, baselineOriginX, baselineOriginY);
+		ICairoTessellationSink* pSink = new ICairoTessellationSink(cr);
 		if (!pSink)
 		{
 			hr = E_OUTOFMEMORY;
@@ -89,14 +90,14 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 		hr = pSink->Close();
 		DebugAssert(SUCCEEDED(hr), "Close ß∞‹£°");
 
-		cairo_surface_flush(surface);
-		DebugPrintf("%s\n", cairo_status_to_string(cairo_status(cr)));
-
 		pSink->Release();
 	}
 
 	pPathGeometry->Release();
 
+	cairo_surface_flush(surface);
+	cairo_translate(cr, -baselineOriginX, -baselineOriginY);
+	//DebugPrintf("%s\n", cairo_status_to_string(cairo_status(cr)));
 	return S_OK;
 }
 
