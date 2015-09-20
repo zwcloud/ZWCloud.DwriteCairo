@@ -6,7 +6,7 @@ namespace ZWCloud.DWriteCairo
     public sealed class D2D1Factory : IDisposable
     {
         [ComImport]
-        [Guid(DirectXUtil.D2D.IID_ID2D1Factory)]
+        [Guid(DirectXUtil.Direct2D.IID_ID2D1Factory)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface ID2D1Factory { }
 
@@ -19,7 +19,7 @@ namespace ZWCloud.DWriteCairo
 
         public static D2D1Factory Create()
         {
-            return new D2D1Factory(DirectXUtil.D2D.CreateFactory());
+            return new D2D1Factory(DirectXUtil.Direct2D.CreateFactory());
         }
 
         private void Release()

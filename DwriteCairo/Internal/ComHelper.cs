@@ -17,7 +17,7 @@ namespace ZWCloud.DWriteCairo.Internal
         /// <param name="slot">Method index in the VTable</param>
         /// <param name="method">Method name</param>
         /// <returns>true: succeed; false: failed</returns>
-        internal static bool GetComMethod<TObject, TMethod>(TObject comObj, int slot, out TMethod method) where TMethod : class
+        internal static bool GetMethod<TObject, TMethod>(TObject comObj, int slot, out TMethod method) where TMethod : class
         {
             IntPtr objectAddress = Marshal.GetComInterfaceForObject(comObj, typeof(TObject));
             if (objectAddress == IntPtr.Zero)
@@ -55,7 +55,8 @@ namespace ZWCloud.DWriteCairo.Internal
     {
         /// <summary>
         /// Index of this method in the VTable of a COM interface
-        /// Make sure you count in the memebers form base COM interface(including IUnknown)!
+        /// NOTE Make sure you count in the memebers form base COM interface(including IUnknown)!
+        /// NOTE Index start form 0
         /// Hint: reference the IDL file of the COM interface
         /// </summary>
         public uint Index { get; set; }

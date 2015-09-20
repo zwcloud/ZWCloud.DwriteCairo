@@ -4,8 +4,11 @@ using System.Runtime.InteropServices;
 using Cairo;
 using ZWCloud.DWriteCairo.Internal;
 
-namespace ZWCloud.DWriteCairo.DWrite
+namespace ZWCloud.DWriteCairo
 {
+    /// <summary>
+    /// DirectWrite TextLayout
+    /// </summary>
     public class TextLayout : IDisposable
     {
         #region COM internals
@@ -13,12 +16,12 @@ namespace ZWCloud.DWriteCairo.DWrite
         [ComImport]
         [Guid("53737037-6d14-410b-9bfe-0b182bb70961")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IDWriteTextLayout { }//contains 25 method(inherited method not included)
+        internal interface IDWriteTextLayout { }//contains 25 method(inherited method not included)
 
         [ComImport]
         [Guid("ef8a8135-5cc6-45fe-8825-c5a0724eb819")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IDWriteTextRenderer { }
+        internal interface IDWriteTextRenderer { }
         
         #region signature delegates of COM method
 
@@ -75,19 +78,19 @@ namespace ZWCloud.DWriteCairo.DWrite
         {
             bool result;
 
-            result = ComHelper.GetComMethod(this.comObject, 28, out this.setMaxWidth);
+            result = ComHelper.GetMethod(this.comObject, 28, out this.setMaxWidth);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 28);
 
-            result = ComHelper.GetComMethod(this.comObject, 29, out this.setMaxHeight);
+            result = ComHelper.GetMethod(this.comObject, 29, out this.setMaxHeight);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 29);
 
-            result = ComHelper.GetComMethod(this.comObject, 42, out this.getMaxWidth);
+            result = ComHelper.GetMethod(this.comObject, 42, out this.getMaxWidth);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 42);
 
-            result = ComHelper.GetComMethod(this.comObject, 43, out this.getMaxHeight);
+            result = ComHelper.GetMethod(this.comObject, 43, out this.getMaxHeight);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 43);
 
-            result = ComHelper.GetComMethod(this.comObject, 58, out this.draw);
+            result = ComHelper.GetMethod(this.comObject, 58, out this.draw);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 58); 
 
             

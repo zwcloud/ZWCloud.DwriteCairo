@@ -3,10 +3,13 @@ using ZWCloud.DWriteCairo.DWrite;
 
 namespace ZWCloud.DWriteCairo
 {
+    /// <summary>
+    /// Helper for use DirectWrite with Cairo
+    /// </summary>
     public static class DWriteCairo
     {
         private static DWriteFactory factory;
-        internal static DWriteFactory Factory
+        private static DWriteFactory Factory
         {
             get
             {
@@ -19,7 +22,7 @@ namespace ZWCloud.DWriteCairo
         }
 
         private static DirectWriteCairoTextRenderer render;
-        internal static DirectWriteCairoTextRenderer Render
+        private static DirectWriteCairoTextRenderer Render
         {
             get
             {
@@ -62,18 +65,16 @@ namespace ZWCloud.DWriteCairo
         /// and formatted result.
         /// </summary>
         /// <param name="text">The text to layout.</param>
-        /// <param name="textLength">The length of the string.</param>
         /// <param name="textFormat">The format to apply to the string.</param>
         /// <param name="maxWidth">Width of the layout box.</param>
         /// <param name="maxHeight">Height of the layout box.</param>
         /// <returns>
         /// The resultant object.
         /// </returns>
-        public static TextLayout CreateTextLayout(string text,
-            int textLength, TextFormat textFormat, float maxWidth, float maxHeight)
+        public static TextLayout CreateTextLayout(string text, TextFormat textFormat, float maxWidth, float maxHeight)
         {
             var ptr = Factory.CreateTextLayout(text,
-            textLength, textFormat.Handle, maxWidth, maxHeight);
+            text.Length, textFormat.Handle, maxWidth, maxHeight);
             var dWriteTextLayout = new TextLayout(ptr);
             return dWriteTextLayout;
         }
@@ -83,8 +84,7 @@ namespace ZWCloud.DWriteCairo
         /// </summary>
         /// <param name="context">a Cairo context</param>
         /// <param name="textLayout">the layout to show</param>
-        public static void ShowLayout(Cairo.Context context,
-            TextLayout textLayout)
+        public static void ShowLayout(Cairo.Context context, TextLayout textLayout)
         {
             textLayout.Show(context, Render, textLayout);
         }

@@ -4,9 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace ZWCloud.DWriteCairo
 {
-    public static class DirectXUtil
+    internal static class DirectXUtil
     {
-        public static class D2D
+        internal static class Direct2D
         {
             public const string IID_ID2D1Factory =
                 "06152247-6f50-465a-9245-118bfd3b6007";
@@ -34,14 +34,14 @@ namespace ZWCloud.DWriteCairo
             [return: MarshalAs(UnmanagedType.Interface)]
             private static extern object D2D1CreateFactory(FactoryType factoryType,
                 [MarshalAs(UnmanagedType.LPStruct)] Guid riid,
-                FactoryOptions pFactoryOptions);
+                FactoryOptions factoryOptions);
 
             public static D2D1Factory.ID2D1Factory CreateFactory()
             {
-                FactoryOptions opts = new FactoryOptions();
+                var factoryOptions = new FactoryOptions();
                 object factory = D2D1CreateFactory(
                     FactoryType.SingleThreaded,
-                    new Guid(IID_ID2D1Factory), opts);
+                    new Guid(IID_ID2D1Factory), factoryOptions);
                 if (factory != null)
                 {
                     Debug.WriteLine("ID2D1Factory created.");
@@ -50,12 +50,11 @@ namespace ZWCloud.DWriteCairo
             }
         }
 
-        public static class DirectWrite
+        internal static class DirectWrite
         {
             #region DwriteFactory
 
-            public const string IID_IDwriteFactory =
-                "b859ee5a-d838-4b5b-a2e8-1adc7d93db48";
+            internal const string IID_IDwriteFactory = "b859ee5a-d838-4b5b-a2e8-1adc7d93db48";
 
             private enum FactoryType
             {
@@ -68,45 +67,28 @@ namespace ZWCloud.DWriteCairo
             private static extern object DWriteCreateFactory(FactoryType factoryType,
                 [MarshalAs(UnmanagedType.LPStruct)] Guid riid);
 
-            public static DWriteFactory.IDWriteFactory CreateFactory()
+            internal static DWriteFactory.IDWriteFactory CreateFactory()
             {
-                object factory = DWriteCreateFactory(
-                    FactoryType.Shared,
-                    new Guid(IID_IDwriteFactory));
-                if (factory != null)
-                {
-                    Debug.WriteLine("IDwriteFactory created.");
-                }
-                return (DWriteFactory.IDWriteFactory)factory;
+                object factory = DWriteCreateFactory(FactoryType.Shared, new Guid(IID_IDwriteFactory));
+                Debug.Assert(factory != null, "IDwriteFactory creating failed.");
+                return (DWriteFactory.IDWriteFactory) factory;
             }
 
             #endregion
-
-            #region DirectWriteTextLayout
-
-
-            #endregion
-
-
-            #region DirectCairo
-            public const string IID_IDirectWriteCairoTextRenderer =
+            
+            internal const string IID_IDirectWriteCairoTextRenderer =
                 "f5b028d5-86fd-4332-ad5e-e86cf11cecd4";
             [DllImport("NativeDwriteCairo.dll", PreserveSig = false)]
             [return: MarshalAs(UnmanagedType.Interface)]
             private static extern object DwriteCairoCreateTextRender(
                 [MarshalAs(UnmanagedType.LPStruct)] Guid riid);
 
-
-            public static DirectWriteCairoTextRenderer.IDirectWriteCairoTextRenderer CreateTextRender()
+            internal static DirectWriteCairoTextRenderer.IDirectWriteCairoTextRenderer CreateTextRender()
             {
                 object render = DwriteCairoCreateTextRender(new Guid(IID_IDirectWriteCairoTextRenderer));
-                if (render != null)
-                {
-                    Debug.WriteLine("IDirectWriteCairoTextRenderer created.");
-                }
-                return (DirectWriteCairoTextRenderer.IDirectWriteCairoTextRenderer)render;
+                Debug.Assert(render != null, "IDirectWriteCairoTextRenderer created.");
+                return (DirectWriteCairoTextRenderer.IDirectWriteCairoTextRenderer) render;
             }
-            #endregion
         }
 
     }
