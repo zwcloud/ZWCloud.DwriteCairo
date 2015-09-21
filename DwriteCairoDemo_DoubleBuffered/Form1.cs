@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Cairo;
 using ZWCloud.DWriteCairo;
-using ZWCloud.DWriteCairo.DWrite;
-using FontStyle = ZWCloud.DWriteCairo.FontStyle;
 using FontWeight = ZWCloud.DWriteCairo.FontWeight;
-using Graphics = System.Drawing.Graphics;
 
 namespace DwriteCairoDemo_DoubleBuffered
 {
@@ -74,15 +70,15 @@ namespace DwriteCairoDemo_DoubleBuffered
 
             var textFormat = DWriteCairo.CreateTextFormat(
                 "Arial",
-                FontWeight.DWRITE_FONT_WEIGHT_NORMAL,
-                FontStyle.DWRITE_FONT_STYLE_NORMAL,
-                FontStretch.DWRITE_FONT_STRETCH_NORMAL,
+                FontWeight.Normal,
+                FontStyle.Normal,
+                FontStretch.Normal,
                 32f);
             
             Debug.Assert(Math.Abs(textFormat.FontSize - 32f) < 0.0001);
             
             const string s = "Hello World";
-            textLayout = DWriteCairo.CreateTextLayout(s, s.Length, textFormat, 300, 40);
+            textLayout = DWriteCairo.CreateTextLayout(s, textFormat, 300, 40);
 
         }
 

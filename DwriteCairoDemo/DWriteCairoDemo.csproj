@@ -104,9 +104,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DwriteCairo\DWriteCairo.csproj">
-      <Project>{233143AD-EDF8-49C4-B69D-2D1EBF58B82E}</Project>
-      <Name>DWriteCairo</Name>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DwriteCairo\DwriteCairo.csproj">
+      <Project>{233143ad-edf8-49c4-b69d-2d1ebf58b82e}</Project>
+      <Name>DwriteCairo</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

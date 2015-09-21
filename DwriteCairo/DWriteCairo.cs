@@ -1,5 +1,4 @@
 ﻿using System;
-using ZWCloud.DWriteCairo.DWrite;
 
 namespace ZWCloud.DWriteCairo
 {

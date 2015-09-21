@@ -17,11 +17,6 @@ namespace ZWCloud.DWriteCairo
         [Guid("53737037-6d14-410b-9bfe-0b182bb70961")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         internal interface IDWriteTextLayout { }//contains 25 method(inherited method not included)
-
-        [ComImport]
-        [Guid("ef8a8135-5cc6-45fe-8825-c5a0724eb819")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        internal interface IDWriteTextRenderer { }
         
         #region signature delegates of COM method
 

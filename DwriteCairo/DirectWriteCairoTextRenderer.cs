@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using ZWCloud.DWriteCairo.DWrite;
 
 namespace ZWCloud.DWriteCairo
 {
+    [ComImport]
+    [Guid("ef8a8135-5cc6-45fe-8825-c5a0724eb819")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    internal interface IDWriteTextRenderer { }
+
     public class DirectWriteCairoTextRenderer :IDisposable
     {
         internal IDirectWriteCairoTextRenderer comObject;
@@ -11,9 +15,9 @@ namespace ZWCloud.DWriteCairo
         [ComImport]
         [Guid(DirectXUtil.DirectWrite.IID_IDirectWriteCairoTextRenderer)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IDirectWriteCairoTextRenderer : TextLayout.IDWriteTextRenderer { }
+        internal interface IDirectWriteCairoTextRenderer : IDWriteTextRenderer { }
 
-        public static DirectWriteCairoTextRenderer Create()
+        internal static DirectWriteCairoTextRenderer Create()
         {
             return new DirectWriteCairoTextRenderer(DirectXUtil.DirectWrite.CreateTextRender());
         }
