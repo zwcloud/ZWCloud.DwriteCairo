@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("zwcloud")]
 [assembly: AssemblyProduct("DwriteCairo")]
-[assembly: AssemblyCopyright("Copyright © Zou Wei")]
+[assembly: AssemblyCopyright("Copyright © Zou Wei 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
