@@ -11,13 +11,58 @@ namespace ZWCloud.DWriteCairo
     /// </summary>
     public class TextLayout : IDisposable
     {
+        #region API
+
+        public float Width
+        {
+            get
+            {
+                return GetMaxWidth();
+            }
+            set
+            {
+                SetMaxWidth(value);
+            }
+        }
+
+        public float Height
+        {
+            get
+            {
+                return GetMaxHeight();
+            }
+            set
+            {
+                SetMaxHeight(value);
+            }
+        }
+
+
+        public void SetText(string text)
+        {
+
+        }
+
+        public void Update()
+        {
+
+        }
+
+        public void XyToIndex()
+        {
+
+        }
+
+        #endregion
+
         #region COM internals
 
         [ComImport]
         [Guid("53737037-6d14-410b-9bfe-0b182bb70961")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         internal interface IDWriteTextLayout { }//contains 25 method(inherited method not included)
-        
+
+        #region COM Method
         #region signature delegates of COM method
 
         [ComMethod(Index = 28)]
@@ -110,6 +155,8 @@ namespace ZWCloud.DWriteCairo
                 this.draw = null;
             }
         }
+
+        #endregion
 
         #region COM Method wrappers
 
@@ -208,8 +255,6 @@ namespace ZWCloud.DWriteCairo
 
         #endregion
 
-
-
         #region Implementation of IDisposable
 
         public void Dispose()
@@ -222,54 +267,11 @@ namespace ZWCloud.DWriteCairo
 
         #endregion
 
-        #region API
-
-        public float Width
-        {
-            get
-            {
-                return GetMaxWidth();
-            }
-            set
-            {
-                SetMaxWidth(value);
-            }
-        }
-        
-        public float Height
-        {
-            get
-            {
-                return GetMaxHeight();
-            }
-            set
-            {
-                SetMaxHeight(value);
-            }
-        }
-
-        public void Show(Context context, DirectWriteCairoTextRenderer render, TextLayout textLayout)
+        //TODO Clean these Extra wrapper methods
+        internal void Show(Context context, DirectWriteCairoTextRenderer render, TextLayout textLayout)
         {
             this.Draw(context.Handle, render, (float)context.CurrentPoint.X, (float)context.CurrentPoint.Y);
         }
 
-        /*TODO*/
-
-        public void SetText(string text)
-        {
-
-        }
-
-        public void Update()
-        {
-
-        }
-
-        public void XyToIndex()
-        {
-
-        }
-
-        #endregion
     }
 }

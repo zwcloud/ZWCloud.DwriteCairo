@@ -30,6 +30,11 @@ namespace ZWCloud.DWriteCairo
 
         private IDWriteTextFormat comObject;
 
+        // BUG? Marshal.GetIUnknownForObject(this.comObject) will offset the pointer by 4 bytes
+        internal IntPtr Handle { get; private set; }
+
+        #region COM methods
+
         #region COM method signatures
 
         /// <summary>
@@ -152,9 +157,6 @@ namespace ZWCloud.DWriteCairo
 
         #endregion
 
-        // BUG? Marshal.GetIUnknownForObject(this.comObject) will offset the pointer by 4 bytes
-        internal IntPtr Handle { get; private set; }
-
         internal TextFormat(IntPtr objPtr)
         {
             comObject =
@@ -211,6 +213,7 @@ namespace ZWCloud.DWriteCairo
             comObject = null;
         }
 
+        #endregion
 
         #region COM Method wrappers
 

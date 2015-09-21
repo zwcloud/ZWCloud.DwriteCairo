@@ -6,12 +6,37 @@ using ZWCloud.DWriteCairo.Internal;
 
 namespace ZWCloud.DWriteCairo
 {
-    public sealed class DWriteFactory : IDisposable
+    internal sealed class DWriteFactory : IDisposable
     {
-        #region COM internals
+        public static DWriteFactory Create()
+        {
+            return new DWriteFactory(CreateFactory());
+        }
 
+    #region COM internals
+
+    #region COM interface creation
+
+        public const string IID_IDWriteFactory = "b859ee5a-d838-4b5b-a2e8-1adc7d93db48";
+
+        public enum FactoryType
+        {
+            Shared,
+            Isolated
+        }
+
+        public static IDWriteFactory CreateFactory()
+        {
+            object factory = Internal.NativeMethods.DWriteCreateFactory(FactoryType.Shared, new Guid(IID_IDWriteFactory));
+            Debug.Assert(factory != null, "IDwriteFactory creating failed.");
+            return (IDWriteFactory)factory;
+        }
+
+        #endregion
+
+    #region COM Methods
         [ComImport]
-        [Guid(DirectXUtil.DirectWrite.IID_IDwriteFactory)]
+        [Guid(IID_IDWriteFactory)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IDWriteFactory { }
 
@@ -40,10 +65,6 @@ namespace ZWCloud.DWriteCairo
 
         #endregion
 
-        public static DWriteFactory Create()
-        {
-            return new DWriteFactory(DirectXUtil.DirectWrite.CreateFactory());
-        }
 
         private IDWriteFactory comObject;
         private CreateTextFormatSignature createTextFormat;
@@ -168,9 +189,11 @@ namespace ZWCloud.DWriteCairo
 
         #endregion
 
-        #endregion
+    #endregion
+    
+    #endregion
 
-        #region Implementation of IDisposable
+    #region Implementation of IDisposable
 
         public void Dispose()
         {
@@ -178,6 +201,7 @@ namespace ZWCloud.DWriteCairo
             GC.SuppressFinalize(this);
         }
 
-        #endregion
+    #endregion
+
     }
 }

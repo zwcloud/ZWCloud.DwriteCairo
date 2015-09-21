@@ -104,9 +104,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\DwriteCairo\DwriteCairo.csproj">
       <Project>{233143ad-edf8-49c4-b69d-2d1ebf58b82e}</Project>
       <Name>DwriteCairo</Name>

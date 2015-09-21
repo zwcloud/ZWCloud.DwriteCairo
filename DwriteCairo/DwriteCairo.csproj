@@ -65,13 +65,12 @@
   <ItemGroup>
     <Compile Include="DWrite\TextFormat.cs" />
     <Compile Include="DWrite\TextLayout.cs" />
-    <Compile Include="D2D1Factory.cs" />
+    <Compile Include="Direct2D\D2D1Factory.cs" />
     <Compile Include="DirectWriteCairoTextRenderer.cs" />
-    <Compile Include="DirectXUtil.cs" />
     <Compile Include="DWriteCairo.cs" />
-    <Compile Include="DWriteFactory.cs" />
+    <Compile Include="DWrite\DWriteFactory.cs" />
     <Compile Include="Internal\ComHelper.cs" />
-    <Compile Include="NativeMethods.cs" />
+    <Compile Include="Internal\NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
