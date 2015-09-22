@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using ZWCloud.DWriteCairo.Internal;
 
 namespace ZWCloud.DWriteCairo
@@ -11,6 +12,15 @@ namespace ZWCloud.DWriteCairo
     public sealed class TextFormat : IDisposable
     {
         #region API
+
+        /// <summary>
+        /// Alignment option of text relative to layout box's leading and trailing edge.
+        /// </summary>
+        public TextAlignment TextAlignment
+        {
+            get { return GetTextAlignment(); }
+            set { SetTextAlignment(value); }
+        }
 
         /// <summary>
         /// Get the font em height.
@@ -26,6 +36,31 @@ namespace ZWCloud.DWriteCairo
         public string FontFamilyName
         {
             get { return GetFontFamilyName(); }
+        }
+
+        /// <summary>
+        /// Get the font weight.
+        /// </summary>
+        public FontWeight FontWeight
+        {
+            get { return GetFontWeight(); }
+        }
+
+        /// <summary>
+        /// Get the font style.
+        /// </summary>
+        public FontStyle FontStyle
+        {
+            get { return GetFontStyle(); }
+        }
+
+
+        /// <summary>
+        /// Get the font stretch.
+        /// </summary>
+        public FontStretch FontStretch
+        {
+            get { return GetFontStretch(); }
         }
 
         #endregion
@@ -254,6 +289,21 @@ namespace ZWCloud.DWriteCairo
             Marshal.ThrowExceptionForHR(hr);
             var result = new string(buffer).TrimEnd('\0');
             return result;
+        }
+
+        private FontWeight GetFontWeight()
+        {
+            return getFontWeight(comObject);
+        }
+
+        private FontStyle GetFontStyle()
+        {
+            return getFontStyle(comObject);
+        }
+
+        private FontStretch GetFontStretch()
+        {
+            return getFontStretch(comObject);
         }
 
         #endregion

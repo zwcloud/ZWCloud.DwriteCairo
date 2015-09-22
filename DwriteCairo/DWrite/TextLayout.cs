@@ -13,6 +13,9 @@ namespace ZWCloud.DWriteCairo
     {
         #region API
 
+        /// <summary>
+        /// Layout maximum width
+        /// </summary>
         public float Width
         {
             get
@@ -25,6 +28,9 @@ namespace ZWCloud.DWriteCairo
             }
         }
 
+        /// <summary>
+        /// Layout maximum height
+        /// </summary>
         public float Height
         {
             get
@@ -36,8 +42,7 @@ namespace ZWCloud.DWriteCairo
                 SetMaxHeight(value);
             }
         }
-
-
+        
         public void SetText(string text)
         {
 
@@ -70,41 +75,41 @@ namespace ZWCloud.DWriteCairo
         private delegate int SetMaxWidthSignature(
             IDWriteTextLayout layout,
             float maxWidth);
+        private SetMaxWidthSignature setMaxWidth;
 
         [ComMethod(Index = 29)]
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate int SetMaxHeightSignature(
             IDWriteTextLayout layout,
             float maxHeight);
+        private SetMaxHeightSignature setMaxHeight;
 
         [ComMethod(Index = 42)]
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate float GetMaxWidthSignature(
             IDWriteTextLayout layout);
+        private GetMaxWidthSignature getMaxWidth;
 
         [ComMethod(Index = 43)]
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate float GetMaxHeightSignature(
             IDWriteTextLayout layout);
+        private GetMaxHeightSignature getMaxHeight;
 
-        [ComMethod(Index=58)]
+        [ComMethod(Index = 58)]
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate int DrawSignature(
             IDWriteTextLayout layout,
             IntPtr clientDrawingContext,
             IDWriteTextRenderer renderer,
             float originX, float originY);
+        private DrawSignature draw;
 
 
         #endregion
 
         internal IntPtr Handle { get; private set; }
         private IDWriteTextLayout comObject;
-        private SetMaxWidthSignature setMaxWidth;
-        private SetMaxHeightSignature setMaxHeight;
-        private GetMaxWidthSignature getMaxWidth;
-        private GetMaxHeightSignature getMaxHeight;
-        private DrawSignature draw;
 
         internal TextLayout(IntPtr objPtr)
         {
@@ -210,7 +215,6 @@ namespace ZWCloud.DWriteCairo
                 maxWidth));
         }
 
-
         /// <summary>
         /// Set layout maximum height
         /// </summary>
@@ -252,6 +256,8 @@ namespace ZWCloud.DWriteCairo
         {
             return this.getMaxHeight(this.comObject);
         }
+
+
 
         #endregion
 
