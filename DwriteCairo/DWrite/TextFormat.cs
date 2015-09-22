@@ -12,9 +12,20 @@ namespace ZWCloud.DWriteCairo
     {
         #region API
 
+        /// <summary>
+        /// Get the font em height.
+        /// </summary>
         public float FontSize
         {
             get { return GetFontSize(); }
+        }
+
+        /// <summary>
+        /// Get a copy of the font family name.
+        /// </summary>
+        public string FontFamilyName
+        {
+            get { return GetFontFamilyName(); }
         }
 
         #endregion
@@ -72,7 +83,7 @@ namespace ZWCloud.DWriteCairo
         /// </remarks>
         [ComMethod(Index = 20)]
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
-        private delegate int GetFontFamilyNameLengthSignature(IDWriteTextFormat textformat);
+        private delegate uint GetFontFamilyNameLengthSignature(IDWriteTextFormat textformat);
 
         private GetFontFamilyNameLengthSignature getFontFamilyNameLength;
 
@@ -93,9 +104,9 @@ namespace ZWCloud.DWriteCairo
         /// </code>
         /// </remarks>
         [ComMethod(Index = 21)]
-        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall,CharSet = CharSet.Unicode)]
         private delegate int GetFontFamilyNameSignature(IDWriteTextFormat textformat,
-            out string fontFamilyName, int nameSize);
+            char[] fontFamilyName, uint nameSize);
 
         private GetFontFamilyNameSignature getFontFamilyName;
 
@@ -233,6 +244,16 @@ namespace ZWCloud.DWriteCairo
         private float GetFontSize()
         {
             return getFontSize(comObject);
+        }
+
+        private string GetFontFamilyName()
+        {
+            var length = getFontFamilyNameLength(comObject) + 1;
+            char[] buffer = new char[length];
+            var hr = getFontFamilyName(comObject, buffer, length);
+            Marshal.ThrowExceptionForHR(hr);
+            var result = new string(buffer).TrimEnd('\0');
+            return result;
         }
 
         #endregion

@@ -33,7 +33,7 @@ namespace DWriteCairoTest
 
             var textFormat = DWriteCairo.CreateTextFormat(fontFamilyName, fontWeight, fontStyle, fontStretch, fontSize);
 
-
+            Assert.AreEqual(fontFamilyName, textFormat.FontFamilyName);
             Assert.AreEqual(fontSize, textFormat.FontSize);
         }
     }
