@@ -417,7 +417,10 @@ namespace ZWCloud.DWriteCairo
 
         private void SetFontWeight(FontWeight fontWeight)
         {
-            var hr = this.setFontWeight(comObject, fontWeight, new TextRange());
+            var hr = this.setFontWeight(comObject, fontWeight, new TextRange {Length = 65535}
+                //Affact all text
+                //TODO Make sure this hack do not harm performance
+                );
             Marshal.ThrowExceptionForHR(hr);
         }
 
