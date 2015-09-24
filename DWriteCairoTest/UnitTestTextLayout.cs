@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ZWCloud.DWriteCairo;
+using System.Diagnostics;
 
 namespace DWriteCairoTest
 {
@@ -34,6 +35,10 @@ namespace DWriteCairoTest
 
             textLayout.Height = maxHeight;
             Assert.AreEqual(maxHeight, textLayout.Height);
+
+            textLayout.FontWeight = FontWeight.Normal;
+            Debug.WriteLine(textLayout.FontWeight);
+            Assert.AreEqual(FontWeight.Normal, textLayout.FontWeight);
 
         }
     }
