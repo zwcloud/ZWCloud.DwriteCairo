@@ -11,7 +11,7 @@ namespace DWriteCairoTest
         [TestMethod]
         public void TestTextLayout()
         {
-            /* Creating */
+            /* create */
             const string fontFamilyName = "SimSun";
             const FontWeight fontWeight = FontWeight.Bold;
             const FontStyle fontStyle = FontStyle.Normal;
@@ -27,19 +27,36 @@ namespace DWriteCairoTest
             Assert.AreEqual(maxWidth, textLayout.Width);
             Assert.AreEqual(maxHeight, textLayout.Height);
 
-            /* Property */
-            maxWidth = 100;
-            maxHeight = 120;
-            textLayout.Width = maxWidth;
-            Assert.AreEqual(maxWidth, textLayout.Width);
+            /* read and write property */
+            textLayout.Width = 100;
+            Assert.AreEqual(100, textLayout.Width);
 
-            textLayout.Height = maxHeight;
-            Assert.AreEqual(maxHeight, textLayout.Height);
+            textLayout.Height = 120;
+            Assert.AreEqual(120, textLayout.Height);
 
+            textLayout.FontWeight = FontWeight.Bold;
+            Assert.AreEqual(FontWeight.Bold, textLayout.FontWeight);
             textLayout.FontWeight = FontWeight.Normal;
-            Debug.WriteLine(textLayout.FontWeight);
             Assert.AreEqual(FontWeight.Normal, textLayout.FontWeight);
 
+            textLayout.FontStyle = FontStyle.Italic;
+            Assert.AreEqual(FontStyle.Italic, textLayout.FontStyle);
+
+            textLayout.FontStyle = FontStyle.Normal;
+            Assert.AreEqual(FontStyle.Normal, textLayout.FontStyle);
+
+            textLayout.FontStretch = FontStretch.Medium;
+            Assert.AreEqual(FontStretch.Medium, textLayout.FontStretch);
+
+            textLayout.FontStretch = FontStretch.Normal;
+            Assert.AreEqual(FontStretch.Normal, textLayout.FontStretch);
+
+            Debug.WriteLine(textLayout.FontFamilyName);
+            textLayout.FontFamilyName = "Courier New";
+            Assert.AreEqual("Courier New", textLayout.FontFamilyName);
+
+            textLayout.FontFamilyName = "Simsun";
+            Assert.AreEqual("simsun", textLayout.FontFamilyName);
         }
     }
 }

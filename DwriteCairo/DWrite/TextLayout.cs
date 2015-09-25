@@ -18,14 +18,8 @@ namespace ZWCloud.DWriteCairo
         /// </summary>
         public float Width
         {
-            get
-            {
-                return GetMaxWidth();
-            }
-            set
-            {
-                SetMaxWidth(value);
-            }
+            get { return GetMaxWidth(); }
+            set { SetMaxWidth(value); }
         }
 
         /// <summary>
@@ -33,20 +27,32 @@ namespace ZWCloud.DWriteCairo
         /// </summary>
         public float Height
         {
-            get
-            {
-                return GetMaxHeight();
-            }
-            set
-            {
-                SetMaxHeight(value);
-            }
+            get { return GetMaxHeight(); }
+            set { SetMaxHeight(value); }
+        }
+
+        public string FontFamilyName
+        {
+            get { return GetFontFamilyName(); }
+            set { SetFontFamilyName(value); }
         }
 
         public FontWeight FontWeight
         {
             get { return GetFontWeight(); }
             set { SetFontWeight(value); }
+        }
+
+        public FontStyle FontStyle
+        {
+            get { return GetFontStyle(); }
+            set { SetFontStyle(value); }
+        }
+
+        public FontStretch FontStretch
+        {
+            get { return GetFontStretch(); }
+            set { SetFontStretch(value); }
         }
         
         public void SetText(string text)
@@ -94,6 +100,7 @@ namespace ZWCloud.DWriteCairo
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate int SetFontFamilyNameSignature(
             IDWriteTextLayout layout,
+            char[] fontFamilyName,
             TextRange textRange);
         private SetFontFamilyNameSignature setFontFamilyName;
         
@@ -155,7 +162,7 @@ namespace ZWCloud.DWriteCairo
         private delegate int GetFontFamilyNameSignature(
             IDWriteTextLayout layout,
             uint currentPosition,
-            string name,
+            char[] fontFamilyName,
             uint nameSize,
             out TextRange textRange);
         private GetFontFamilyNameSignature getFontFamilyName;
@@ -415,15 +422,6 @@ namespace ZWCloud.DWriteCairo
             return this.getMaxHeight(this.comObject);
         }
 
-        private void SetFontWeight(FontWeight fontWeight)
-        {
-            var hr = this.setFontWeight(comObject, fontWeight, new TextRange {Length = 65535}
-                //Affact all text
-                //TODO Make sure this hack do not harm performance
-                );
-            Marshal.ThrowExceptionForHR(hr);
-        }
-
         private FontWeight GetFontWeight()
         {
             FontWeight fontWeight;
@@ -433,6 +431,70 @@ namespace ZWCloud.DWriteCairo
             return fontWeight;
         }
 
+        private void SetFontWeight(FontWeight fontWeight)
+        {
+            var hr = this.setFontWeight(comObject, fontWeight, new TextRange {Length = 65535}
+                //Affact all text
+                //TODO Make sure this hack do not harm performance
+                );
+            Marshal.ThrowExceptionForHR(hr);
+        }
+
+        private FontStyle GetFontStyle()
+        {
+            FontStyle fontStyle;
+            TextRange textRangDummy;//Not used
+            var hr = getFontStyle(comObject, 0, out fontStyle, out textRangDummy);
+            Marshal.ThrowExceptionForHR(hr);
+            return fontStyle;
+        }
+
+        private void SetFontStyle(FontStyle fontStyle)
+        {
+            var hr = this.setFontStyle(comObject, fontStyle, new TextRange { Length = 65535 }
+                //Affact all text
+                //TODO Make sure this hack do not harm performance
+                );
+            Marshal.ThrowExceptionForHR(hr);
+        }
+
+        private FontStretch GetFontStretch()
+        {
+            FontStretch fontStretch;
+            TextRange textRangDummy;//Not used
+            var hr = getFontStretch(comObject, 0, out fontStretch, out textRangDummy);
+            Marshal.ThrowExceptionForHR(hr);
+            return fontStretch;
+        }
+
+        private void SetFontStretch(FontStretch fontStretch)
+        {
+            var hr = this.setFontStretch(comObject, fontStretch, new TextRange { Length = 65535 }
+                //Affact all text
+                //TODO Make sure this hack do not harm performance
+                );
+            Marshal.ThrowExceptionForHR(hr);
+        }
+
+        private string GetFontFamilyName()
+        {
+            uint length;
+            TextRange textRange;
+            var hr = getFontFamilyNameLength(comObject, 0, out length, out textRange);
+            Marshal.ThrowExceptionForHR(hr);
+            length += 1;
+            char[] buffer = new char[length];
+            hr = getFontFamilyName(comObject, 0, buffer, length, out textRange);
+            Marshal.ThrowExceptionForHR(hr);
+            var result = new string(buffer).TrimEnd('\0');
+            return result;
+        }
+
+        private void SetFontFamilyName(string fontFamilyName)
+        {
+            var hr = setFontFamilyName(comObject, fontFamilyName.ToCharArray(), new TextRange { Length = 65535 });
+            Marshal.ThrowExceptionForHR(hr);
+        }
 
         #endregion
 
