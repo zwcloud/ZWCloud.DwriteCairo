@@ -100,7 +100,8 @@ namespace ZWCloud.DWriteCairo
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate int SetFontFamilyNameSignature(
             IDWriteTextLayout layout,
-            char[] fontFamilyName,
+            [MarshalAs(UnmanagedType.LPStr)]
+            string fontFamilyName,
             TextRange textRange);
         private SetFontFamilyNameSignature setFontFamilyName;
         
@@ -162,6 +163,7 @@ namespace ZWCloud.DWriteCairo
         private delegate int GetFontFamilyNameSignature(
             IDWriteTextLayout layout,
             uint currentPosition,
+            [Out]
             char[] fontFamilyName,
             uint nameSize,
             out TextRange textRange);
@@ -483,7 +485,7 @@ namespace ZWCloud.DWriteCairo
             var hr = getFontFamilyNameLength(comObject, 0, out length, out textRange);
             Marshal.ThrowExceptionForHR(hr);
             length += 1;
-            char[] buffer = new char[length];
+            char[] buffer = new char[2*length];
             hr = getFontFamilyName(comObject, 0, buffer, length, out textRange);
             Marshal.ThrowExceptionForHR(hr);
             var result = new string(buffer).TrimEnd('\0');
@@ -492,7 +494,8 @@ namespace ZWCloud.DWriteCairo
 
         private void SetFontFamilyName(string fontFamilyName)
         {
-            var hr = setFontFamilyName(comObject, fontFamilyName.ToCharArray(), new TextRange { Length = 65535 });
+            var fontFamilyNameArray = (fontFamilyName + '\0').ToCharArray();
+            var hr = setFontFamilyName(comObject, fontFamilyName, new TextRange { Length = 65535 });
             Marshal.ThrowExceptionForHR(hr);
         }
 

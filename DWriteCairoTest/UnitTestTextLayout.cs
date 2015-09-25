@@ -51,12 +51,11 @@ namespace DWriteCairoTest
             textLayout.FontStretch = FontStretch.Normal;
             Assert.AreEqual(FontStretch.Normal, textLayout.FontStretch);
 
-            Debug.WriteLine(textLayout.FontFamilyName);
             textLayout.FontFamilyName = "Courier New";
             Assert.AreEqual("Courier New", textLayout.FontFamilyName);
 
             textLayout.FontFamilyName = "Simsun";
-            Assert.AreEqual("simsun", textLayout.FontFamilyName);
+            Assert.AreEqual("Simsun", textLayout.FontFamilyName);
         }
     }
 }
