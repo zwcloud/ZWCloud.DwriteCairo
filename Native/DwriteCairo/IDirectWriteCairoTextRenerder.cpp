@@ -47,8 +47,19 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 {
 	HRESULT hr;
 
-	cr = static_cast<cairo_t*>(clientDrawingContext);
-	surface = cairo_get_target(cr);
+	auto new_cr = static_cast<cairo_t*>(clientDrawingContext);
+	if (new_cr != cr)
+	{
+		cr = new_cr;
+		surface = cairo_get_target(cr);
+		pSink = new ICairoTessellationSink(cr);
+		if (!pSink)
+		{
+			hr = E_OUTOFMEMORY;
+			return hr;
+		}
+	}
+
 	cairo_identity_matrix(cr);
 	cairo_translate(cr, baselineOriginX, baselineOriginY);
 
@@ -79,11 +90,6 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 	}
 
 	{
-		ICairoTessellationSink* pSink = new ICairoTessellationSink(cr);
-		if (!pSink)
-		{
-			hr = E_OUTOFMEMORY;
-		}
 		DebugAssert(SUCCEEDED(hr), "ICairoGeometrySink ´´½¨Ê§°Ü£¡");
 		hr = pPathGeometry->Tessellate(nullptr, pSink);
 		DebugAssert(SUCCEEDED(hr), "TessellateÊ§°Ü£¡Error: %d\n", hr);
@@ -127,7 +133,8 @@ HRESULT IDirectWriteCairoTextRenderer::QueryInterface(const IID& riid, void** ob
 {
 	if (object == nullptr)
 		return E_POINTER;
-	if (__uuidof(IDWriteTextRenderer) == riid || IID_IDirectWriteCairoTextRenderer == riid || __uuidof(IUnknown) == riid) {
+	if (__uuidof(IDWriteTextRenderer) == riid || IID_IDirectWriteCairoTextRenderer == riid || __uuidof(IUnknown) == riid)
+	{
 		*object = this;
 		this->AddRef();
 		return S_OK;

@@ -3,6 +3,7 @@
 #include <d2d1.h>
 #include <cairo\cairo.h>
 
+struct ICairoTessellationSink;
 struct IDirectWriteCairoTextRenderer : IDWriteTextRenderer
 {
 	// {F5B028D5-86FD-4332-AD5E-E86CF11CECD4}
@@ -29,4 +30,5 @@ private:
 
 	cairo_surface_t *surface;
 	cairo_t *cr;
+	ICairoTessellationSink* pSink;
 };

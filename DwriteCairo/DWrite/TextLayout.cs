@@ -31,43 +31,57 @@ namespace ZWCloud.DWriteCairo
             set { SetMaxHeight(value); }
         }
 
+        /// <summary>
+        /// Font family name
+        /// </summary>
         public string FontFamilyName
         {
             get { return GetFontFamilyName(); }
             set { SetFontFamilyName(value); }
         }
 
+        /// <summary>
+        /// Font weight
+        /// </summary>
         public FontWeight FontWeight
         {
             get { return GetFontWeight(); }
             set { SetFontWeight(value); }
         }
 
+        /// <summary>
+        /// Font style
+        /// </summary>
         public FontStyle FontStyle
         {
             get { return GetFontStyle(); }
             set { SetFontStyle(value); }
         }
 
+        /// <summary>
+        /// Font stretch
+        /// </summary>
         public FontStretch FontStretch
         {
             get { return GetFontStretch(); }
             set { SetFontStretch(value); }
         }
         
+        /// <summary>
+        /// Set text of the layout
+        /// </summary>
+        /// <param name="text"></param>
         public void SetText(string text)
         {
-
+            throw new NotImplementedException();
         }
 
-        public void Update()
-        {
-
-        }
-
+        /// <summary>
+        /// Get nearest character index from the point
+        /// </summary>
         public void XyToIndex()
         {
-
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -242,8 +256,8 @@ namespace ZWCloud.DWriteCairo
 
         internal TextLayout(IntPtr objPtr)
         {
-            this.Handle = objPtr;
-            this.comObject =
+            Handle = objPtr;
+            comObject =
                 (IDWriteTextLayout) Marshal.GetObjectForIUnknown(objPtr);
 
             InitComMethods();
@@ -252,79 +266,79 @@ namespace ZWCloud.DWriteCairo
         {
             bool result;
 
-            result = ComHelper.GetMethod(this.comObject, 28, out this.setMaxWidth);
+            result = ComHelper.GetMethod(comObject, 28, out setMaxWidth);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 28);
 
-            result = ComHelper.GetMethod(this.comObject, 29, out this.setMaxHeight);
+            result = ComHelper.GetMethod(comObject, 29, out setMaxHeight);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 29);
 
-            result = ComHelper.GetMethod(this.comObject, 31, out this.setFontFamilyName);
+            result = ComHelper.GetMethod(comObject, 31, out setFontFamilyName);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 31);
 
-            result = ComHelper.GetMethod(this.comObject, 32, out this.setFontWeight);
+            result = ComHelper.GetMethod(comObject, 32, out setFontWeight);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 32);
 
-            result = ComHelper.GetMethod(this.comObject, 33, out this.setFontStyle);
+            result = ComHelper.GetMethod(comObject, 33, out setFontStyle);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 33);
 
-            result = ComHelper.GetMethod(this.comObject, 34, out this.setFontStretch);
+            result = ComHelper.GetMethod(comObject, 34, out setFontStretch);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 34);
 
-            result = ComHelper.GetMethod(this.comObject, 35, out this.setFontSize);
+            result = ComHelper.GetMethod(comObject, 35, out setFontSize);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 35);
             
-            result = ComHelper.GetMethod(this.comObject, 42, out this.getMaxWidth);
+            result = ComHelper.GetMethod(comObject, 42, out getMaxWidth);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 42);
 
-            result = ComHelper.GetMethod(this.comObject, 43, out this.getMaxHeight);
+            result = ComHelper.GetMethod(comObject, 43, out getMaxHeight);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 43);
             
-            result = ComHelper.GetMethod(this.comObject, 45, out this.getFontFamilyNameLength);
+            result = ComHelper.GetMethod(comObject, 45, out getFontFamilyNameLength);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 45);
             
-            result = ComHelper.GetMethod(this.comObject, 46, out this.getFontFamilyName);
+            result = ComHelper.GetMethod(comObject, 46, out getFontFamilyName);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 46);
             
-            result = ComHelper.GetMethod(this.comObject, 47, out this.getFontWeight);
+            result = ComHelper.GetMethod(comObject, 47, out getFontWeight);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 47);
             
-            result = ComHelper.GetMethod(this.comObject, 48, out this.getFontStyle);
+            result = ComHelper.GetMethod(comObject, 48, out getFontStyle);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 48);
             
-            result = ComHelper.GetMethod(this.comObject, 49, out this.getFontStretch);
+            result = ComHelper.GetMethod(comObject, 49, out getFontStretch);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 49);
             
-            result = ComHelper.GetMethod(this.comObject, 50, out this.getFontSize);
+            result = ComHelper.GetMethod(comObject, 50, out getFontSize);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 50);
 
-            result = ComHelper.GetMethod(this.comObject, 58, out this.draw);
+            result = ComHelper.GetMethod(comObject, 58, out draw);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 58);
 
-            result = ComHelper.GetMethod(this.comObject, 64, out this.hitTestPoint);
+            result = ComHelper.GetMethod(comObject, 64, out hitTestPoint);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 64);
 
-            result = ComHelper.GetMethod(this.comObject, 65, out this.hitTestTextPosition);
+            result = ComHelper.GetMethod(comObject, 65, out hitTestTextPosition);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 65);
             
         }
 
         ~TextLayout()
         {
-            this.Release();
+            Release();
         }
 
         private void Release()
         {
-            if (this.comObject != null)
+            if (comObject != null)
             {
-                Marshal.ReleaseComObject(this.comObject);
-                this.comObject = null;
+                Marshal.ReleaseComObject(comObject);
+                comObject = null;
 
-                this.setMaxWidth = null;
-                this.setMaxHeight = null;
-                this.getMaxWidth = null;
-                this.getMaxHeight = null;
-                this.draw = null;
+                setMaxWidth = null;
+                setMaxHeight = null;
+                getMaxWidth = null;
+                getMaxHeight = null;
+                draw = null;
             }
         }
 
@@ -357,8 +371,8 @@ namespace ZWCloud.DWriteCairo
             float originX, float originY)
         {
             var dwriterender = (IDWriteTextRenderer) renderer.comObject; 
-            Marshal.ThrowExceptionForHR(this.draw(
-                this.comObject,
+            Marshal.ThrowExceptionForHR(draw(
+                comObject,
                 clientDrawingContext, dwriterender, originX, originY));
         }
         
@@ -378,7 +392,7 @@ namespace ZWCloud.DWriteCairo
         /// </remarks>
         private void SetMaxWidth(float maxWidth)
         {
-            Marshal.ThrowExceptionForHR(this.setMaxWidth(this.comObject,
+            Marshal.ThrowExceptionForHR(setMaxWidth(comObject,
                 maxWidth));
         }
 
@@ -398,7 +412,7 @@ namespace ZWCloud.DWriteCairo
         /// </remarks>
         private void SetMaxHeight(float maxHeight)
         {
-            Marshal.ThrowExceptionForHR(this.setMaxHeight(this.comObject,
+            Marshal.ThrowExceptionForHR(setMaxHeight(comObject,
                 maxHeight));
         }
 
@@ -408,7 +422,7 @@ namespace ZWCloud.DWriteCairo
         /// STDMETHOD_(FLOAT, GetMaxWidth)() PURE;
         private float GetMaxWidth()
         {
-            return this.getMaxWidth(this.comObject);
+            return getMaxWidth(comObject);
         }
         
         /// <summary>
@@ -421,21 +435,21 @@ namespace ZWCloud.DWriteCairo
         /// </remarks>
         private float GetMaxHeight()
         {
-            return this.getMaxHeight(this.comObject);
+            return getMaxHeight(comObject);
         }
 
         private FontWeight GetFontWeight()
         {
             FontWeight fontWeight;
             TextRange textRangDummy;//Not used
-            var hr = this.getFontWeight(comObject, 0, out fontWeight, out textRangDummy);
+            var hr = getFontWeight(comObject, 0, out fontWeight, out textRangDummy);
             Marshal.ThrowExceptionForHR(hr);
             return fontWeight;
         }
 
         private void SetFontWeight(FontWeight fontWeight)
         {
-            var hr = this.setFontWeight(comObject, fontWeight, new TextRange {Length = 65535}
+            var hr = setFontWeight(comObject, fontWeight, new TextRange {Length = 65535}
                 //Affact all text
                 //TODO Make sure this hack do not harm performance
                 );
@@ -453,7 +467,7 @@ namespace ZWCloud.DWriteCairo
 
         private void SetFontStyle(FontStyle fontStyle)
         {
-            var hr = this.setFontStyle(comObject, fontStyle, new TextRange { Length = 65535 }
+            var hr = setFontStyle(comObject, fontStyle, new TextRange { Length = 65535 }
                 //Affact all text
                 //TODO Make sure this hack do not harm performance
                 );
@@ -471,7 +485,7 @@ namespace ZWCloud.DWriteCairo
 
         private void SetFontStretch(FontStretch fontStretch)
         {
-            var hr = this.setFontStretch(comObject, fontStretch, new TextRange { Length = 65535 }
+            var hr = setFontStretch(comObject, fontStretch, new TextRange { Length = 65535 }
                 //Affact all text
                 //TODO Make sure this hack do not harm performance
                 );
@@ -505,7 +519,7 @@ namespace ZWCloud.DWriteCairo
 
         public void Dispose()
         {
-            this.Release();
+            Release();
             GC.SuppressFinalize(this);
         }
 
@@ -516,7 +530,7 @@ namespace ZWCloud.DWriteCairo
         //TODO Clean these Extra wrapper methods
         internal void Show(Context context, DirectWriteCairoTextRenderer render, TextLayout textLayout)
         {
-            this.Draw(context.Handle, render, (float)context.CurrentPoint.X, (float)context.CurrentPoint.Y);
+            Draw(context.Handle, render, (float)context.CurrentPoint.X, (float)context.CurrentPoint.Y);
         }
 
     }
