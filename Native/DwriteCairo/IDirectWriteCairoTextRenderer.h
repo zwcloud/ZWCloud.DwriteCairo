@@ -28,7 +28,6 @@ private:
 	ULONG volatile count_;
 	ID2D1Factory* pD2DFactory_;
 
-	cairo_surface_t *surface;
 	cairo_t *cr;
 	ICairoTessellationSink* pSink;
 };

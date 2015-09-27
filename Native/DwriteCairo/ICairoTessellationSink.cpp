@@ -1,6 +1,5 @@
 #include "ICairoTessellationSink.h"
 #include <cairo/cairo.h>
-#include "DebugUtility.h"
 
 
 const GUID ICairoTessellationSink::IID_ICairoTessellationSink =
@@ -27,8 +26,6 @@ STDMETHODIMP_(void) ICairoTessellationSink::AddTriangles(__in_ecount(trianglesCo
 
 STDMETHODIMP ICairoTessellationSink::Close()
 {
-	cairo_fill(cr);
-	DebugPrintf("ICairoTessellationSink::Close\n");
 	return S_OK;
 }
 

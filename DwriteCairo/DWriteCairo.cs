@@ -1,4 +1,5 @@
 ﻿using System;
+using Cairo;
 using ZWCloud.DWriteCairo.Internal;
 
 namespace ZWCloud.DWriteCairo
@@ -71,7 +72,7 @@ namespace ZWCloud.DWriteCairo
         /// <returns>
         /// The resultant object.
         /// </returns>
-        public static TextLayout CreateTextLayout(string text, TextFormat textFormat, float maxWidth, float maxHeight)
+        public static TextLayout CreateTextLayout(string text, TextFormat textFormat, int maxWidth, int maxHeight)
         {
             var ptr = Factory.CreateTextLayout(text,
             text.Length, textFormat.Handle, maxWidth, maxHeight);
@@ -84,9 +85,9 @@ namespace ZWCloud.DWriteCairo
         /// </summary>
         /// <param name="context">a Cairo context</param>
         /// <param name="textLayout">the layout to show</param>
-        public static void ShowLayout(Cairo.Context context, TextLayout textLayout)
+        public static Path RenderLayoutToCairoPath(Cairo.Context context, TextLayout textLayout)
         {
-            textLayout.Show(context, Render, textLayout);
+            return textLayout.RenderToCairoPath(context, Render, textLayout);
         }
     }
 }

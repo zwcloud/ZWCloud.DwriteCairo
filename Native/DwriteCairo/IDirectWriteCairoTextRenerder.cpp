@@ -3,6 +3,8 @@
 #include "ICairoTessellationSink.h"
 #include "DebugUtility.h"
 
+//#define DEBUG_PRINT_GLYPH_INFO
+
 const GUID IDirectWriteCairoTextRenderer::IID_IDirectWriteCairoTextRenderer =
 { 0xf5b028d5, 0x86fd, 0x4332, { 0xad, 0x5e, 0xe8, 0x6c, 0xf1, 0x1c, 0xec, 0xd4 } };
 
@@ -51,7 +53,6 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 	if (new_cr != cr)
 	{
 		cr = new_cr;
-		surface = cairo_get_target(cr);
 		pSink = new ICairoTessellationSink(cr);
 		if (!pSink)
 		{
@@ -89,6 +90,38 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 		pD2DSink->Release();
 	}
 
+#ifdef  DEBUG_PRINT_GLYPH_INFO
+	static wchar_t* enumStringsOfmeasuringMode[] =
+	{
+		L"DWRITE_MEASURING_MODE_NATURAL",
+		L"DWRITE_MEASURING_MODE_GDI_CLASSIC",
+		L"DWRITE_MEASURING_MODE_GDI_NATURAL"
+	};
+	DebugPrintf(L"Baseline X,Y: (%.3f, %.3f)\n", baselineOriginX, baselineOriginY);
+	DebugPrintf(L"Measuring Mode: %s\n", enumStringsOfmeasuringMode[measuringMode]);
+
+	for (int i = 0; i < glyphRun->glyphCount; ++i)
+	{
+		DebugPrintf(L"----GlyphRun %d----\n", i);
+		DebugPrintf(L"Glyph Index: %d\n", glyphRun->glyphIndices[i]);
+		DebugPrintf(L"Glyph Advance: %d\n", glyphRun->glyphAdvances[i]);
+		DebugPrintf(L"Glyph Advance offset: %d Ascender offset:%d\n", glyphRun->glyphOffsets[i].advanceOffset,
+			glyphRun->glyphOffsets[i].ascenderOffset);
+	}
+
+	DebugPrintf(L"----GlyphRun Description----\n");
+	DebugPrintf(L"	Locale name: %s\n", glyphRunDescription->localeName);
+	DebugPrintf(L"	String: %s\n", glyphRunDescription->string);
+	DebugPrintf(L"	String length: %d\n", glyphRunDescription->stringLength);
+	DebugPrintf(L"	Cluster map:\n		");
+	for (int i = 0; i < glyphRunDescription->stringLength; ++i)
+	{
+		DebugPrintf(L"%d, ", glyphRunDescription->clusterMap[i]);
+	}
+	DebugPrintf(L"\n");
+	DebugPrintf(L"	Text position: %d\n", glyphRunDescription->textPosition);
+#endif
+
 	{
 		DebugAssert(SUCCEEDED(hr), "ICairoGeometrySink ´´½¨Ê§°Ü£¡");
 		hr = pPathGeometry->Tessellate(nullptr, pSink);
@@ -101,8 +134,8 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 
 	pPathGeometry->Release();
 
-	cairo_surface_flush(surface);
 	cairo_translate(cr, -baselineOriginX, -baselineOriginY);
+	cairo_identity_matrix(cr);
 	//DebugPrintf("%s\n", cairo_status_to_string(cairo_status(cr)));
 	return S_OK;
 }
@@ -141,30 +174,5 @@ HRESULT IDirectWriteCairoTextRenderer::QueryInterface(const IID& riid, void** ob
 	}
 	*object = nullptr;
 	return E_FAIL;
-}
-#pragma endregion
-
-#pragma region test
-int main(int argc, char *argv[])
-{
-#if 0
-	cairo_surface_t *surface =
-		cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 240, 80);
-	cairo_t *cr =
-		cairo_create(surface);
-
-	cairo_select_font_face(cr, "serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
-	cairo_set_font_size(cr, 32.0);
-	cairo_set_source_rgb(cr, 0.0, 0.0, 1.0);
-	cairo_move_to(cr, 10.0, 50.0);
-	cairo_show_text(cr, "Hello, world");
-
-	cairo_destroy(cr);
-	cairo_surface_write_to_png(surface, "hello.png");
-	cairo_surface_destroy(surface);
-	return 0;
-#endif
-
-
 }
 #pragma endregion

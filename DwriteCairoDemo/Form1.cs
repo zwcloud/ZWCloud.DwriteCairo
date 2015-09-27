@@ -56,11 +56,14 @@ namespace DWriteCairoDemo
 
             Debug.Assert(Math.Abs(textFormat.FontSize - 32f) < 0.0001);
 
-            const string s = "Hello World";
+            const string s = "Hello World 1213142124234252352153245345325345";
             textLayout = DWriteCairo.CreateTextLayout(s, textFormat, 300, 40);
 
             Debug.WriteLine("showing layout");
-            DWriteCairo.ShowLayout(Context1, textLayout);
+            Path path = DWriteCairo.RenderLayoutToCairoPath(Context1, textLayout);
+            Context1.AppendPath(path);
+            Context1.Fill();
+            Context1.GetTarget().Flush();
         }
     }
 }

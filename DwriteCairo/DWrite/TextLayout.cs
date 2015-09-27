@@ -16,18 +16,18 @@ namespace ZWCloud.DWriteCairo
         /// <summary>
         /// Layout maximum width
         /// </summary>
-        public float Width
+        public int Width
         {
-            get { return GetMaxWidth(); }
+            get { return (int)GetMaxWidth(); }
             set { SetMaxWidth(value); }
         }
 
         /// <summary>
         /// Layout maximum height
         /// </summary>
-        public float Height
+        public int Height
         {
-            get { return GetMaxHeight(); }
+            get { return (int)GetMaxHeight(); }
             set { SetMaxHeight(value); }
         }
 
@@ -348,6 +348,7 @@ namespace ZWCloud.DWriteCairo
 
         /// <summary>
         /// Initiate drawing of the text.
+        /// (In fact it just build a cairo path of the text. It DO NOT draw to cairo surface.)
         /// </summary>
         /// <param name="clientDrawingContext">An application defined value
         /// included in rendering callbacks.</param>
@@ -527,12 +528,13 @@ namespace ZWCloud.DWriteCairo
 
         #endregion
 
-        //TODO Clean these Extra wrapper methods
-        internal void Show(Context context, DirectWriteCairoTextRenderer render, TextLayout textLayout)
+        internal Path RenderToCairoPath(Context context, DirectWriteCairoTextRenderer render, TextLayout textLayout)
         {
             Draw(context.Handle, render, (float)context.CurrentPoint.X, (float)context.CurrentPoint.Y);
+            var result = context.CopyPath();
+            context.NewPath();
+            return result;
         }
-
     }
 
 
