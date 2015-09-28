@@ -44,7 +44,10 @@ namespace DwriteCairoDemo_DoubleBuffered
 
             BackContext.SetSourceColor(new Cairo.Color(0, 1, 0));
             BackContext.MoveTo(new PointD(p3.X + 10, p3.Y + 10));
-            DWriteCairo.ShowLayout(BackContext, textLayout);
+            Cairo.Path path = DWriteCairo.RenderLayoutToCairoPath(BackContext, textLayout);
+            BackContext.AppendPath(path);
+            path.Dispose();
+            BackContext.Fill();
 
             //copy back surface to font surface
             SwapBuffer();

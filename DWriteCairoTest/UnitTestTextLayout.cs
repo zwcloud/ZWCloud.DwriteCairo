@@ -18,8 +18,8 @@ namespace DWriteCairoTest
             const FontStretch fontStretch = FontStretch.Normal;
             const float fontSize = 32f;
             var textFormat = DWriteCairo.CreateTextFormat(fontFamilyName, fontWeight, fontStyle, fontStretch, fontSize);
-            float maxWidth = 200;
-            float maxHeight = 80;
+            int maxWidth = 200;
+            int maxHeight = 80;
 
             var textLayout = DWriteCairo.CreateTextLayout("Hello! 你好！ こんにちは 안녕하세요", textFormat, maxWidth, maxHeight);
 
