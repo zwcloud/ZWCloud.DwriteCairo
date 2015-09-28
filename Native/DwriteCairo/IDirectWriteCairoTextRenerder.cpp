@@ -60,8 +60,8 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 			return hr;
 		}
 	}
-
-	cairo_identity_matrix(cr);
+	//DebugPrintf(L"X %.3f Y %.3f\n", baselineOriginX, baselineOriginY);
+	cairo_save(cr);
 	cairo_translate(cr, baselineOriginX, baselineOriginY);
 
 	ID2D1PathGeometry* pPathGeometry = nullptr;
@@ -134,8 +134,7 @@ HRESULT IDirectWriteCairoTextRenderer::DrawGlyphRun(
 
 	pPathGeometry->Release();
 
-	cairo_translate(cr, -baselineOriginX, -baselineOriginY);
-	cairo_identity_matrix(cr);
+	cairo_restore(cr);
 	//DebugPrintf("%s\n", cairo_status_to_string(cairo_status(cr)));
 	return S_OK;
 }

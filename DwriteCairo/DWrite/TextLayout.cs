@@ -530,6 +530,7 @@ namespace ZWCloud.DWriteCairo
 
         internal Path RenderToCairoPath(Context context, DirectWriteCairoTextRenderer render, TextLayout textLayout)
         {
+            //Debug.WriteLine("Before `Draw`: Current point at <{0},{1}>", (float)context.CurrentPoint.X, (float)context.CurrentPoint.Y);
             Draw(context.Handle, render, (float)context.CurrentPoint.X, (float)context.CurrentPoint.Y);
             var result = context.CopyPath();
             context.NewPath();
