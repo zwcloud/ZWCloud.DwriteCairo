@@ -28,8 +28,9 @@ namespace DWriteCairoTest
             Assert.AreEqual(fontSize, textFormat.FontSize);
 
             textFormat.TextAlignment = TextAlignment.Center;
-
             Assert.AreEqual(textFormat.TextAlignment, TextAlignment.Center);
+            textFormat.TextAlignment = TextAlignment.Leading;
+            Assert.AreEqual(textFormat.TextAlignment, TextAlignment.Leading);
         }
     }
 }
