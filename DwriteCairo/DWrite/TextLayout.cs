@@ -68,20 +68,35 @@ namespace ZWCloud.DWriteCairo
         }
         
         /// <summary>
-        /// Set text of the layout
+        /// Get nearest character index from the point.
         /// </summary>
-        /// <param name="text"></param>
-        public void SetText(string text)
+        /// <param name="pointX">X coordinate to hit-test, relative to the top-left location of the layout box.</param>
+        /// <param name="pointY">Y coordinate to hit-test, relative to the top-left location of the layout box.</param>
+        public uint XyToIndex(float pointX, float pointY)
         {
-            throw new NotImplementedException();
+            bool isTrailingHit;
+            bool isInside;
+            HitTestMetrics hitTestMetrics;
+            HitTestPoint(pointX, pointY, out isTrailingHit, out isInside, out hitTestMetrics);
+
+            return hitTestMetrics.TextPosition;
         }
 
         /// <summary>
-        /// Get nearest character index from the point
+        /// Given a character index and whether the caret is on the leading or trailing
+        /// edge of that position.
         /// </summary>
-        public void XyToIndex()
+        /// <param name="textPosition"></param>
+        /// <param name="isTrailingHit"></param>
+        /// <param name="pointX"></param>
+        /// <param name="pointY"></param>
+        /// <param name="height"></param>
+        public void IndexToXY(uint textPosition, bool isTrailingHit,
+            out float pointX, out float pointY, out float height)
         {
-            throw new NotImplementedException();
+            HitTestMetrics hitTestMetrics;
+            HitTestTextPosition(textPosition, isTrailingHit, out pointX, out pointY, out hitTestMetrics);
+            height = hitTestMetrics.Height;
         }
 
         #endregion
@@ -509,8 +524,89 @@ namespace ZWCloud.DWriteCairo
 
         private void SetFontFamilyName(string fontFamilyName)
         {
-            var fontFamilyNameArray = (fontFamilyName + '\0').ToCharArray();
             var hr = setFontFamilyName(comObject, fontFamilyName, new TextRange { Length = 65535 });
+            Marshal.ThrowExceptionForHR(hr);
+        }
+
+        /// <summary>
+        /// Given a coordinate (in DIPs) relative to the top-left of the layout box,
+        /// this returns the corresponding hit-test metrics of the text string where
+        /// the hit-test has occurred. This is useful for mapping mouse clicks to caret
+        /// positions. When the given coordinate is outside the text string, the function
+        /// sets the output value *isInside to false but returns the nearest character
+        /// position.
+        /// </summary>
+        /// <param name="pointX">X coordinate to hit-test, relative to the top-left location of the layout box.</param>
+        /// <param name="pointY">Y coordinate to hit-test, relative to the top-left location of the layout box.</param>
+        /// <param name="isTrailingHit">Output flag indicating whether the hit-test location is at the leading or the trailing
+        ///     side of the character. When the output *isInside value is set to false, this value is set according to the output
+        ///     *position value to represent the edge closest to the hit-test location. </param>
+        /// <param name="isInside">Output flag indicating whether the hit-test location is inside the text string.
+        ///     When false, the position nearest the text's edge is returned.</param>
+        /// <param name="hitTestMetrics">Output geometry fully enclosing the hit-test location. When the output *isInside value
+        ///     is set to false, this structure represents the geometry enclosing the edge closest to the hit-test location.</param>
+        /// <returns>
+        /// Standard HRESULT error code.
+        /// </returns>
+        /// <remarks>
+        /// <code>
+        /// STDMETHOD(HitTestPoint)(
+        ///    FLOAT pointX,
+        ///    FLOAT pointY,
+        ///    _Out_ BOOL* isTrailingHit,
+        ///    _Out_ BOOL* isInside,
+        ///    _Out_ DWRITE_HIT_TEST_METRICS* hitTestMetrics
+        ///    ) PURE;
+        /// </code>
+        /// </remarks>
+        private void HitTestPoint(float pointX, float pointY,
+            out bool isTrailingHit, out bool isInside, out HitTestMetrics hitTestMetrics)
+        {
+            var hr = hitTestPoint(comObject, pointX, pointY, out isTrailingHit, out isInside, out hitTestMetrics);
+            Marshal.ThrowExceptionForHR(hr);
+        }
+
+        /// <summary>
+        /// Given a text position and whether the caret is on the leading or trailing
+        /// edge of that position, this returns the corresponding coordinate (in DIPs)
+        /// relative to the top-left of the layout box. This is most useful for drawing
+        /// the caret's current position, but it could also be used to anchor an IME to the
+        /// typed text or attach a floating menu near the point of interest. It may also be
+        /// used to programmatically obtain the geometry of a particular text position
+        /// for UI automation.
+        /// </summary>
+        /// <param name="textPosition">Text position to get the coordinate of.</param>
+        /// <param name="isTrailingHit">Flag indicating whether the location is of the leading or the trailing side of the specified text position. </param>
+        /// <param name="pointX">Output caret X, relative to the top-left of the layout box.</param>
+        /// <param name="pointY">Output caret Y, relative to the top-left of the layout box.</param>
+        /// <param name="hitTestMetrics">Output geometry fully enclosing the specified text position.</param>
+        /// <returns>
+        /// Standard HRESULT error code.
+        /// </returns>
+        /// <remarks>
+        /// <code>
+        /// STDMETHOD(HitTestTextPosition)(
+        ///     UINT32 textPosition,
+        ///     BOOL isTrailingHit,
+        ///     _Out_ FLOAT* pointX,
+        ///     _Out_ FLOAT* pointY,
+        ///     _Out_ DWRITE_HIT_TEST_METRICS* hitTestMetrics
+        ///     ) PURE;
+        /// </code>
+        /// When drawing a caret at the returned X,Y, it should be centered on X
+        /// and drawn from the Y coordinate down. The height will be the size of the
+        /// hit-tested text (which can vary in size within a line).
+        /// Reading direction also affects which side of the character the caret is drawn.
+        /// However, the returned X coordinate will be correct for either case.
+        /// You can get a text length back that is larger than a single character.
+        /// This happens for complex scripts when multiple characters form a single cluster,
+        /// when diacritics join their base character, or when you test a surrogate pair.
+        /// </remarks>
+        private void HitTestTextPosition(uint textPosition, bool isTrailingHit,
+            out float pointX, out float pointY, out HitTestMetrics hitTestMetrics)
+        {
+            var hr = hitTestTextPosition(comObject, textPosition, isTrailingHit, out pointX, out pointY,
+                out hitTestMetrics);
             Marshal.ThrowExceptionForHR(hr);
         }
 

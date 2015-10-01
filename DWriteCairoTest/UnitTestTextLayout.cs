@@ -1,7 +1,7 @@
-﻿using System;
+﻿using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ZWCloud.DWriteCairo;
-using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace DWriteCairoTest
 {
@@ -18,10 +18,13 @@ namespace DWriteCairoTest
             const FontStretch fontStretch = FontStretch.Normal;
             const float fontSize = 32f;
             var textFormat = DWriteCairo.CreateTextFormat(fontFamilyName, fontWeight, fontStyle, fontStretch, fontSize);
-            int maxWidth = 200;
-            int maxHeight = 80;
+            textFormat.TextAlignment = TextAlignment.Leading;
 
-            var textLayout = DWriteCairo.CreateTextLayout("Hello! 你好！ こんにちは 안녕하세요", textFormat, maxWidth, maxHeight);
+            var text = "Hello! 你好！ こんにちは 안녕하세요";
+            int maxWidth = 200;
+            int maxHeight = 40;
+
+            var textLayout = DWriteCairo.CreateTextLayout(text, textFormat, maxWidth, maxHeight);
 
             Assert.IsNotNull(textLayout, "TextLayout creating failed.");
             Assert.AreEqual(maxWidth, textLayout.Width);
@@ -57,5 +60,54 @@ namespace DWriteCairoTest
             textLayout.FontFamilyName = "Simsun";
             Assert.AreEqual("Simsun", textLayout.FontFamilyName);
         }
+
+        [TestMethod]
+        public void TestTextLayoutXYToIndex()
+        {
+            const string fontFamilyName = "SimSun";
+            const FontWeight fontWeight = FontWeight.Bold;
+            const FontStyle fontStyle = FontStyle.Normal;
+            const FontStretch fontStretch = FontStretch.Normal;
+            const float fontSize = 32f;
+            var textFormat = DWriteCairo.CreateTextFormat(fontFamilyName, fontWeight, fontStyle, fontStretch, fontSize);
+            textFormat.TextAlignment = TextAlignment.Leading;
+
+            var text = "Hello! 你好！ こんにちは 안녕하세요";
+            int maxWidth = 200;
+            int maxHeight = 40;
+
+            var textLayout = DWriteCairo.CreateTextLayout(text, textFormat, maxWidth, maxHeight);
+            var characterIndex = textLayout.XyToIndex(0f, 0f);
+            Assert.AreEqual(0u, characterIndex);
+
+            //Make sure this point(1000f, 1000f) is off the bottom right of the text layout box.
+            characterIndex = textLayout.XyToIndex(1000f, 1000f);
+            Assert.AreEqual((uint)text.Length - 1, characterIndex);
+
+            MessageBox.Show("All test passed.\nNow run DWriteCairoDemo and click on the text to check if the XyToIndex works well.");
+        }
+
+        [TestMethod]
+        public void TestTextLayoutIndexToXY()
+        {
+            const string fontFamilyName = "SimSun";
+            const FontWeight fontWeight = FontWeight.Bold;
+            const FontStyle fontStyle = FontStyle.Normal;
+            const FontStretch fontStretch = FontStretch.Normal;
+            const float fontSize = 32f;
+            var textFormat = DWriteCairo.CreateTextFormat(fontFamilyName, fontWeight, fontStyle, fontStretch, fontSize);
+            textFormat.TextAlignment = TextAlignment.Leading;
+
+            var text = "Hello! 你好！ こんにちは 안녕하세요";
+            int maxWidth = 200;
+            int maxHeight = 40;
+
+            var textLayout = DWriteCairo.CreateTextLayout(text, textFormat, maxWidth, maxHeight);
+            float x, y, height;
+            uint characterIndex = 1;
+            textLayout.IndexToXY(characterIndex, false, out x, out y, out height);
+            Debug.WriteLine("Character index: {0}, point: ({1},{2}), height: {3}", characterIndex, x, y, height);
+        }
+
     }
 }

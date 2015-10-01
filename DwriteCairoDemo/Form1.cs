@@ -56,14 +56,26 @@ namespace DWriteCairoDemo
 
             Debug.Assert(Math.Abs(textFormat.FontSize - 32f) < 0.0001);
 
-            const string s = "Hello World 1213142124234252352153245345325345";
-            textLayout = DWriteCairo.CreateTextLayout(s, textFormat, 300, 40);
+            const string s = "Hello! 你好！ こんにちは 안녕하세요";
+            textLayout = DWriteCairo.CreateTextLayout(s, textFormat, ClientSize.Width, ClientSize.Height);
 
             Debug.WriteLine("showing layout");
             Path path = DWriteCairo.RenderLayoutToCairoPath(Context1, textLayout);
             Context1.AppendPath(path);
             Context1.Fill();
             Context1.GetTarget().Flush();
+        }
+
+        private void Form1_Click(object sender, EventArgs e)
+        {
+            if(textLayout == null)
+            {
+                return;
+            }
+            var mousePosition = PointToClient(MousePosition);
+            var characterIndex = textLayout.XyToIndex(mousePosition.X, mousePosition.Y);
+            MessageBox.Show(string.Format("Mouse Clicked at {0},{1}: character index is {2}", mousePosition.X,
+                mousePosition.Y, characterIndex));
         }
     }
 }
