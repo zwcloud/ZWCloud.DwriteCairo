@@ -77,12 +77,21 @@ namespace DWriteCairoTest
             int maxHeight = 40;
 
             var textLayout = DWriteCairo.CreateTextLayout(text, textFormat, maxWidth, maxHeight);
-            var characterIndex = textLayout.XyToIndex(0f, 0f);
-            Assert.AreEqual(0u, characterIndex);
+            bool isInside;
+            var caretIndex = textLayout.XyToIndex(0f, 0f, out isInside);
+            if (!isInside && caretIndex == text.Length - 1)
+            {
+                ++caretIndex;
+            }
+            Assert.AreEqual(0u, caretIndex);
 
             //Make sure this point(1000f, 1000f) is off the bottom right of the text layout box.
-            characterIndex = textLayout.XyToIndex(1000f, 1000f);
-            Assert.AreEqual((uint)text.Length - 1, characterIndex);
+            caretIndex = textLayout.XyToIndex(1000f, 1000f, out isInside);
+            if (!isInside && caretIndex == text.Length - 1)
+            {
+                ++caretIndex;
+            }
+            Assert.AreEqual((uint)text.Length, caretIndex);
 
             MessageBox.Show("All test passed.\nNow run DWriteCairoDemo and click on the text to check if the XyToIndex works well.");
         }

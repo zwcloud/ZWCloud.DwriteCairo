@@ -40,6 +40,8 @@ namespace DWriteCairoDemo
             Context1.Stroke();
         }
 
+        const string s = "Hello";//"! 你好！ こんにちは 안녕하세요";
+
         private void Form1_Shown(object sender, EventArgs e)
         {
             Debug.WriteLine("Form1_Shown");
@@ -55,8 +57,9 @@ namespace DWriteCairoDemo
                 32f);
 
             Debug.Assert(Math.Abs(textFormat.FontSize - 32f) < 0.0001);
+            
+            textFormat.TextAlignment = TextAlignment.Center;
 
-            const string s = "Hello! 你好！ こんにちは 안녕하세요";
             textLayout = DWriteCairo.CreateTextLayout(s, textFormat, ClientSize.Width, ClientSize.Height);
 
             Debug.WriteLine("showing layout");
@@ -73,9 +76,14 @@ namespace DWriteCairoDemo
                 return;
             }
             var mousePosition = PointToClient(MousePosition);
-            var characterIndex = textLayout.XyToIndex(mousePosition.X, mousePosition.Y);
+            bool isInside;
+            var caretIndex = textLayout.XyToIndex(mousePosition.X, mousePosition.Y, out isInside);
+            if (!isInside && caretIndex == s.Length - 1)
+            {
+                ++caretIndex;
+            }
             MessageBox.Show(string.Format("Mouse Clicked at {0},{1}: character index is {2}", mousePosition.X,
-                mousePosition.Y, characterIndex));
+                mousePosition.Y, caretIndex));
         }
     }
 }

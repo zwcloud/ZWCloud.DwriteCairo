@@ -66,16 +66,17 @@ namespace ZWCloud.DWriteCairo
             get { return GetFontStretch(); }
             set { SetFontStretch(value); }
         }
-        
+
         /// <summary>
         /// Get nearest character index from the point.
         /// </summary>
         /// <param name="pointX">X coordinate to hit-test, relative to the top-left location of the layout box.</param>
         /// <param name="pointY">Y coordinate to hit-test, relative to the top-left location of the layout box.</param>
-        public uint XyToIndex(float pointX, float pointY)
+        /// <param name="isInside">Output flag indicating whether the hit-test location is inside the text string.
+        ///     When false, the position nearest the text's edge is returned.</param>
+        public uint XyToIndex(float pointX, float pointY, out bool isInside)
         {
             bool isTrailingHit;
-            bool isInside;
             HitTestMetrics hitTestMetrics;
             HitTestPoint(pointX, pointY, out isTrailingHit, out isInside, out hitTestMetrics);
 
