@@ -16,7 +16,7 @@ namespace ZWCloud.DWriteCairo
         /// <summary>
         /// Layout maximum width
         /// </summary>
-        public int Width
+        public int MaxWidth
         {
             get { return (int)GetMaxWidth(); }
             set { SetMaxWidth(value); }
@@ -25,11 +25,12 @@ namespace ZWCloud.DWriteCairo
         /// <summary>
         /// Layout maximum height
         /// </summary>
-        public int Height
+        public int MaxHeight
         {
             get { return (int)GetMaxHeight(); }
             set { SetMaxHeight(value); }
         }
+
 
         /// <summary>
         /// Font family name
@@ -98,6 +99,16 @@ namespace ZWCloud.DWriteCairo
             HitTestMetrics hitTestMetrics;
             HitTestTextPosition(textPosition, isTrailingHit, out pointX, out pointY, out hitTestMetrics);
             height = hitTestMetrics.Height;
+        }
+
+        public void GetRect(out float left, out float top, out float width, out float height)
+        {
+            TextMetrics textMetrics;
+            GetMetrics(out textMetrics);
+            left = textMetrics.Left;
+            top = textMetrics.Top;
+            width = textMetrics.Width;
+            height = textMetrics.Height;
         }
 
         #endregion
@@ -243,6 +254,13 @@ namespace ZWCloud.DWriteCairo
             float originX, float originY);
         private DrawSignature draw;
 
+        [ComMethod(Index = 60)]
+        [UnmanagedFunctionPointer(CallingConvention.StdCall)]
+        private delegate int GetMetricsSignature(
+            IDWriteTextLayout layout,
+            out TextMetrics textMetrics);
+        private GetMetricsSignature getMetrics;
+
         [ComMethod(Index = 64)]
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         private delegate int HitTestPointSignature(
@@ -329,6 +347,9 @@ namespace ZWCloud.DWriteCairo
 
             result = ComHelper.GetMethod(comObject, 58, out draw);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 58);
+
+            result = ComHelper.GetMethod(comObject, 60, out getMetrics);
+            if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 60);
 
             result = ComHelper.GetMethod(comObject, 64, out hitTestPoint);
             if (!result) Debug.WriteLine("Fail to get COM method at index {0}", 64);
@@ -530,6 +551,30 @@ namespace ZWCloud.DWriteCairo
         }
 
         /// <summary>
+        /// GetMetrics retrieves overall metrics for the formatted string.
+        /// </summary>
+        /// <param name="textMetrics">The returned metrics.</param>
+        /// <returns>
+        /// Standard HRESULT error code.
+        /// </returns>
+        /// <remarks>
+        /// <code>
+        /// STDMETHOD(GetMetrics)(
+        ///     _Out_ DWRITE_INLINE_OBJECT_METRICS* metrics
+        ///     ) PURE;
+        /// </code>
+        /// Drawing effects like underline and strikethrough do not contribute
+        /// to the text size, which is essentially the sum of advance widths and
+        /// line heights. Additionally, visible swashes and other graphic
+        /// adornments may extend outside the returned width and height.
+        /// </remarks>
+        private void GetMetrics(out TextMetrics textMetrics)
+        {
+            var hr = getMetrics(comObject, out textMetrics);
+            Marshal.ThrowExceptionForHR(hr);
+        }
+
+        /// <summary>
         /// Given a coordinate (in DIPs) relative to the top-left of the layout box,
         /// this returns the corresponding hit-test metrics of the text string where
         /// the hit-test has occurred. This is useful for mapping mouse clicks to caret
@@ -652,6 +697,68 @@ namespace ZWCloud.DWriteCairo
         public uint Length;
     };
 
+    /// <summary>
+    /// Overall metrics associated with text after layout.
+    /// All coordinates are in device independent pixels (DIPs).
+    /// </summary>
+    internal struct TextMetrics
+    {
+        /// <summary>
+        /// Left-most point of formatted text relative to layout box
+        /// (excluding any glyph overhang).
+        /// </summary>
+        public float Left;
+
+        /// <summary>
+        /// Top-most point of formatted text relative to layout box
+        /// (excluding any glyph overhang).
+        /// </summary>
+        public float Top;
+
+        /// <summary>
+        /// The width of the formatted text ignoring trailing whitespace
+        /// at the end of each line.
+        /// </summary>
+        public float Width;
+
+        /// <summary>
+        /// The width of the formatted text taking into account the
+        /// trailing whitespace at the end of each line.
+        /// </summary>
+        public float WidthIncludingTrailingWhitespace;
+
+        /// <summary>
+        /// The height of the formatted text. The height of an empty string
+        /// is determined by the size of the default font's line height.
+        /// </summary>
+        public float Height;
+
+        /// <summary>
+        /// Initial width given to the layout. Depending on whether the text
+        /// was wrapped or not, it can be either larger or smaller than the
+        /// text content width.
+        /// </summary>
+        public float LayoutWidth;
+
+        /// <summary>
+        /// Initial height given to the layout. Depending on the length of the
+        /// text, it may be larger or smaller than the text content height.
+        /// </summary>
+        public float LayoutHeight;
+
+        /// <summary>
+        /// The maximum reordering count of any line of text, used
+        /// to calculate the most number of hit-testing boxes needed.
+        /// If the layout has no bidirectional text or no text at all,
+        /// the minimum level is 1.
+        /// </summary>
+        public uint MaxBidiReorderingDepth;
+
+        /// <summary>
+        /// Total number of lines.
+        /// </summary>
+        public uint LineCount;
+    };
 
     /// <summary>
     /// Geometry enclosing of text positions.

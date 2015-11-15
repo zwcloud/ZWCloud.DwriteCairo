@@ -78,12 +78,15 @@ namespace DWriteCairoDemo
             var mousePosition = PointToClient(MousePosition);
             bool isInside;
             var caretIndex = textLayout.XyToIndex(mousePosition.X, mousePosition.Y, out isInside);
+            float left, top, width, height;
+            textLayout.GetRect(out left, out top, out width, out height);
+            System.Drawing.RectangleF textRect = new System.Drawing.RectangleF(left, top, width, height);
             if (!isInside && caretIndex == s.Length - 1)
             {
                 ++caretIndex;
             }
-            MessageBox.Show(string.Format("Mouse Clicked at {0},{1}: character index is {2}", mousePosition.X,
-                mousePosition.Y, caretIndex));
+            MessageBox.Show(string.Format("Mouse Clicked at {0},{1}: character index is {2}. Text rect: {3}", mousePosition.X,
+                mousePosition.Y, caretIndex, textRect));
         }
     }
 }
