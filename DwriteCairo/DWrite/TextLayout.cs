@@ -107,7 +107,7 @@ namespace ZWCloud.DWriteCairo
             GetMetrics(out textMetrics);
             left = textMetrics.Left;
             top = textMetrics.Top;
-            width = textMetrics.Width;
+            width = textMetrics.WidthIncludingTrailingWhitespace;
             height = textMetrics.Height;
         }
 

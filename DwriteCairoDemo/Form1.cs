@@ -9,10 +9,10 @@ namespace DWriteCairoDemo
 {
     public partial class Form1 : Form
     {
-        public Context Context1 { get; set; }
-        public Win32Surface Surface1 { get; private set; }
-
+        private Context context;
+        private Win32Surface surface;
         private TextLayout textLayout;
+        private TextFormat textFormat;
 
         public Form1()
         {
@@ -30,43 +30,56 @@ namespace DWriteCairoDemo
             var p3 = new PointD(100, 100);
             var p4 = new PointD(10, 100);
 
-            Context1.SetSourceColor(new Cairo.Color(1,0,0));
-            Context1.MoveTo(p1);
-            Context1.LineTo(p2);
-            Context1.LineTo(p3);
-            Context1.LineTo(p4);
-            Context1.LineTo(p1);
-            Context1.ClosePath();
-            Context1.Stroke();
+            context.SetSourceColor(new Cairo.Color(1,0,0));
+            context.MoveTo(p1);
+            context.LineTo(p2);
+            context.LineTo(p3);
+            context.LineTo(p4);
+            context.LineTo(p1);
+            context.ClosePath();
+            context.Stroke();
         }
 
-        const string s = "Hello";//"! 你好！ こんにちは 안녕하세요";
+        const string s = "dummy0";//"Hello!你好！";//"こんにちは 안녕하세요";
+        System.Drawing.RectangleF textRect;
 
         private void Form1_Shown(object sender, EventArgs e)
         {
             Debug.WriteLine("Form1_Shown");
 
-            Surface1 = new Win32Surface(this.CreateGraphics().GetHdc());
-            Context1 = new Context(Surface1);
+            surface = new Win32Surface(this.CreateGraphics().GetHdc());
+            context = new Context(surface);
 
-            var textFormat = DWriteCairo.CreateTextFormat(
-                "Arial",
+            textFormat = DWriteCairo.CreateTextFormat(
+                "Consolas",
                 FontWeight.Normal,
                 FontStyle.Normal,
                 FontStretch.Normal,
-                32f);
+                12);
 
-            Debug.Assert(Math.Abs(textFormat.FontSize - 32f) < 0.0001);
-            
             textFormat.TextAlignment = TextAlignment.Center;
+            
+            float left, top, width, height;
 
-            textLayout = DWriteCairo.CreateTextLayout(s, textFormat, ClientSize.Width, ClientSize.Height);
+            // get actual size of the text
+            var measureLayout = DWriteCairo.CreateTextLayout(s, textFormat, 4096, 4096);
+            measureLayout.GetRect(out left, out top, out width, out height);
+            measureLayout.Dispose();
+
+            // build text context against the size and format
+            textLayout = DWriteCairo.CreateTextLayout(s, textFormat, (int)Math.Ceiling(width), (int)Math.Ceiling(height));
 
             Debug.WriteLine("showing layout");
-            Path path = DWriteCairo.RenderLayoutToCairoPath(Context1, textLayout);
-            Context1.AppendPath(path);
-            Context1.Fill();
-            Context1.GetTarget().Flush();
+            Path path = DWriteCairo.RenderLayoutToCairoPath(context, textLayout);
+            context.AppendPath(path);
+            context.Fill();
+
+            textLayout.GetRect(out left, out top, out width, out height);
+            textRect = new System.Drawing.RectangleF(left, top, width, height);
+            context.Rectangle(left, top, width, height);
+            context.Stroke();
+
+            context.GetTarget().Flush();
         }
 
         private void Form1_Click(object sender, EventArgs e)
@@ -78,15 +91,25 @@ namespace DWriteCairoDemo
             var mousePosition = PointToClient(MousePosition);
             bool isInside;
             var caretIndex = textLayout.XyToIndex(mousePosition.X, mousePosition.Y, out isInside);
-            float left, top, width, height;
-            textLayout.GetRect(out left, out top, out width, out height);
-            System.Drawing.RectangleF textRect = new System.Drawing.RectangleF(left, top, width, height);
+
             if (!isInside && caretIndex == s.Length - 1)
             {
                 ++caretIndex;
             }
             MessageBox.Show(string.Format("Mouse Clicked at {0},{1}: character index is {2}. Text rect: {3}", mousePosition.X,
                 mousePosition.Y, caretIndex, textRect));
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            textLayout.Dispose();
+            textFormat.Dispose();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            surface.Dispose();
+            context.Dispose();
         }
     }
 }
